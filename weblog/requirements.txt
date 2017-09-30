@@ -1,0 +1,15 @@
+flask
+flask-script
+flask-sqlalchemy
+cx_Oracle
+Flask-Migrate
+flask-wtf
+flask-Bcrypt
+flask-openid
+flask-login
+flask-principal
+flask-mongoengine
+flask-restful
+celery
+flask-celery-helper
+HTMLParser

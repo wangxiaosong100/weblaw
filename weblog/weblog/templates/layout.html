@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ title }} - 审计微博</title>
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <label class="btn-toolbar"><img src="../static/image/logo.jpg" width="50" height="50" class="img-circle"/></label>
+                <label class="btn-toolbar">&nbsp;</label>
+            </div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">审计法规库</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            综合 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">宪政</a></li>
+                            <li><a href="#">行政</a></li>
+                            <li><a href="#">行事</a></li>
+                            <li><a href="#">民事</a></li>
+                        </ul>
+                    </li>
+                        
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            审计 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">国家审计</a></li>
+                            <li><a href="#">内部审计</a></li>
+                            <li><a href="#">注册会计师</a></li>
+                            <li><a href="#">其他</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            财政财务 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">综合</a></li>
+                            <li><a href="#">行政</a></li>
+                            <li><a href="#">事业</a></li>
+                            <li><a href="#">海关</a></li>
+                            <li><a href="#">农业</a></li>
+                            <li><a href="#">社保</a></li>
+                            <li><a href="#">外资</a></li>
+                            <li><a href="#">基建</a></li>
+                            <li><a href="#">其也</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            税收 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">综合</a></li>
+                            <li><a href="#">征管</a></li>
+                            <li><a href="#">流转税</a></li>
+                            <li><a href="#">所得税</a></li>
+                            <li><a href="#">其他税费</a></li>
+                            <li><a href="#">其他</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            金融 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">综合</a></li>
+                            <li><a href="#">商业银行</a></li>
+                            <li><a href="#">政策性银行</a></li>
+                            <li><a href="#">证券期货</a></li>
+                            <li><a href="#">保险</a></li>                          
+                            <li><a href="#">其也</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            企业 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">综合</a></li>
+                            <li><a href="#">工业</a></li>
+                            <li><a href="#">贸易</a></li>
+                            <li><a href="#">交通运输</a></li>
+                            <li><a href="#">建设</a></li>
+                            <li><a href="#">信息邮政</a></li>
+                            <li><a href="#">军工</a></li>
+                            <li><a href="#">三资</a></li>
+                            <li><a href="#">其也</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{{ url_for('contact') }}">党内规章制度</a></li>
+                </ul>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>{{form.content(class_='form-control')}} /></li>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn btn-primary btn-larger" value="搜索" /></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                游客登录 <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">登录</a></li>
+                                <li><a href="#">注册</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+                   
+    </div>
+</div>
+
+    <div class="container body-content">
+        {% block content %}{% endblock %}       
+        <hr />
+        <footer>
+            <p>&copy; {{ year }} - 审计法规库</p>
+        </footer>
+    </div>
+
+    <script src="/static/scripts/jquery-1.10.2.js"></script>
+    <script src="/static/scripts/bootstrap.js"></script>
+    <script src="/static/scripts/respond.js"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>
