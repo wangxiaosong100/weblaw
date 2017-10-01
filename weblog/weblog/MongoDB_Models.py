@@ -11,6 +11,7 @@ class User(mongo.Document):
       roles=mongo.ListField(
           mongo.StringField(choices=available_roles)
           )
+      user_head=mongo.StringField()
       def getBcrypt_password(self,password):
         return bcrypt.generate_password_hash(password)
       def check_password(self,password):

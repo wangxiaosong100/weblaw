@@ -1,0 +1,72 @@
+﻿{% extends "layout.html" %}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-2">
+            <div class="list-group">
+
+
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <h4>用户注册</h4>
+            <div class="list-group">
+                <form method="post" action="{{url_for('.register')}}">
+                    {{form.hidden_tag()}}
+                    <div class="list-group-item">
+                        <div class="list-group-item-text">
+                            <h5>用户名:</h5>
+                            {% if form.username.errors %}
+                            {% for e in form.username.errors%}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{form.username(class_='form-control')}}
+                        </div>
+                        <div class="list-group-item-text">
+                            <h5>头像:</h5>
+                            {% if form.user_head_image.errors %}
+                            {% for e in form.user_head_image.errors%}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{form.user_head_image(class_='form-control')}}
+                        </div>
+                        <div class="list-group-item-text">
+                            <h5>密  码：</h5>
+                            {% if form.password.errors %}
+                            {% for e in form.password.errors %}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{ form.password(class_='form-control')}}
+                        </div>
+                        <div class="list-group-item-text">
+                            <h5>确认密码:</h5>
+                            {% if form.confirm.errors %}
+                            {% for e in form.confirm.errors %}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{ form.confirm(class_='form-control')}}
+                        </div>
+                        <p>
+                            <div class="list-group-item-text">
+                                <input class="btn btn-primary" type="submit" value="注册" />
+
+                            </div>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="list-group">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

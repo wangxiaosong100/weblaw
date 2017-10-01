@@ -1,73 +1,93 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 <div class="container">
-
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="jumbotron">
-                <div class="list-group">
-                    <div class="list-unstyled">
-                        最新更新
-                    </div>
-                    <div class="list-group-item">
-                        <div class="list-group-item-heading">
-                            Head
-                        </div>
-                        <div class="list-group-item-text">
-                            <p>
-                                this is a test
-                            </p>
-                        </div>
-                    </div>
-                    <div class="list-group-item">
-                        <div class="list-group-item-heading">
-                            Head
-                        </div>
-                        <div class="list-group-item-text">
-                            <p>
-                                this is a test
-                            </p>
-                        </div>
-                    </div>
-                    <div class="list-group-item">
-                        <div class="list-group-item-heading">
-                            Head
-                        </div>
-                        <div class="list-group-item-text">
-                            <p>
-                                this is a test
-                            </p>
-                        </div>
-                    </div>
-                </div>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-10">
+                <img src="{% if g.current_user %}
+                             ../static/image/{{g.current_user.user_head}}
+                          {% else %}
+                            ../static/image/anomose.jpg
+                          {% endif %}
+                         "
+                     class="img-thumbnail" width="64" height="64" />
+                <h4>
+                    {% if g.current_user %}
+                    {{ g.current_user.username }}
+                    {% else %}
+                    游客
+                    {% endif %}
+                    &nbsp;&nbsp;你好，欢迎进入审计法律法规库
+                </h4>
             </div>
+            <div class="col-lg-2">
+                
+            </div>
+          
         </div>
-        <div class="col-lg-1">
+    </div>
+        <div class="row">
+            <div class="col-lg-8">
+                    <div class="list-group">
+                        <div class="list-unstyled">
+                            最新更新
+                        </div>
+                        <div class="list-group-item">
+                            <div class="list-group-item-heading">
+                                Head
+                            </div>
+                            <div class="list-group-item-text">
+                                <p>
+                                    this is a test
+                                </p>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="list-group-item-heading">
+                                Head
+                            </div>
+                            <div class="list-group-item-text">
+                                <p>
+                                    this is a test
+                                </p>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="list-group-item-heading">
+                                Head
+                            </div>
+                            <div class="list-group-item-text">
+                                <p>
+                                    this is a test
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-lg-1">
 
-        </div>
-        <div class="col-lg-3">
-            <div class="jumbotron">
-                <div class="list-group">
-                    <div class="list-group-item-heading">
-                        Hotest
-                    </div>
-                    <div class="list-group-item">
+            </div>
+            <div class="col-lg-3">
+                    <div class="list-group">
                         <div class="list-group-item-heading">
-                            test
+                            Hotest
                         </div>
-                        <div class="list-group-item-text">
-                            test
-                        </div>
-                        <div class="list-group-item-heading">
-                            test
-                        </div>
-                        <div class="list-group-item-text">
-                            test
+                        <div class="list-group-item">
+                            <div class="list-group-item-heading">
+                                test
+                            </div>
+                            <div class="list-group-item-text">
+                                test
+                            </div>
+                            <div class="list-group-item-heading">
+                                test
+                            </div>
+                            <div class="list-group-item-text">
+                                test
+                            </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

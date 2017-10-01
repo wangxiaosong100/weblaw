@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="weblog\static\content\bootstrap-datetimepicker.css" />
+    <Content Include="weblog\static\content\bootstrap-datetimepicker.min.css" />
     <Content Include="weblog\static\content\bootstrap.css" />
     <Content Include="weblog\static\content\bootstrap.min.css" />
     <Content Include="weblog\static\content\site.css" />
@@ -55,10 +57,12 @@
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="weblog\static\image\anomose.jpg" />
     <Content Include="weblog\static\image\data.jpg" />
     <Content Include="weblog\static\image\datadownload.jpg" />
     <Content Include="weblog\static\image\datasearch.jpg" />
     <Content Include="weblog\static\image\dataupload.jpg" />
+    <Content Include="weblog\static\image\wangxs.jpg" />
     <Content Include="weblog\static\scripts\bootstrap.js" />
     <Content Include="weblog\static\scripts\bootstrap.min.js" />
     <Content Include="weblog\static\scripts\jquery-1.10.2.intellisense.js" />
@@ -78,6 +82,8 @@
     <Content Include="weblog\templates\contact.html" />
     <Content Include="weblog\templates\index.html" />
     <Content Include="weblog\templates\layout.html" />
+    <Content Include="weblog\templates\login.html" />
+    <Content Include="weblog\templates\register.html" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="flask\">

@@ -8,7 +8,8 @@ from wtforms import (
     TextAreaField,
     PasswordField,
     BooleanField,
-    SelectField
+    SelectField,
+    FileField
     )
 from wtforms.validators import DataRequired,Length,EqualTo,URL
 
@@ -65,6 +66,7 @@ class RegisterForm(Form):
         DataRequired(),
         EqualTo('password')
         ])
+    user_head_image=FileField('请选择头像文件')
     #recaptcha=RecaptchaField()
     def validate(self):
         check_validate=super(RegisterForm,self).validate()
