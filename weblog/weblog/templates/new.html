@@ -1,0 +1,14 @@
+﻿{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <form action="POST">
+        <textarea name="editor1"></textarea>
+    </form>
+</div>
+{% endblock%}
+ {% block scripts %}
+<script>
+    CKEDITOR.replace('editor1');
+</script>
+
+{% endblock %}

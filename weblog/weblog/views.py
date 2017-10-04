@@ -110,6 +110,9 @@ def register():
         form=form
         )
 
+@app.route('/new')
+def new():
+    return render_template('new.html')
 
 @app.route('/contact')
 def contact():

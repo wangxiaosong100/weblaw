@@ -83,6 +83,20 @@ class RegisterForm(Form):
             return False
         return True
 
+class newLawForm(Form):
+    LawTitle=StringField('法规标题',[
+        DataRequired()
+        ])
+    LawFileNo=StringField('法规文号',[
+        DataRequired(),
+        Length(max=255)
+        ])
+    LawTypetype=SelectField('法规分类',choices=[
+        ('Blog','文字'),
+        ('VideoBlog','视频'),
+        ('ImageBlog','图片'),
+        ('QuoteBlog','Quto')
+        ])
 class PostForm(Form):
     title=StringField('Title',[
         DataRequired(),
