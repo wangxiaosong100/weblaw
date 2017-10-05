@@ -1,14 +1,83 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 <div class="container">
-    <form action="POST">
-        <textarea name="editor1"></textarea>
-    </form>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <form method="post" action="{{url_for('new')}}">
+                {{form.hidden_tag()}}
+                <div class="list-group-item">
+                    <div class="list-group-item-text">
+                        <h5>标题:</h5>
+                        {% if form.LawTitle.errors %}
+                        {% for e in form.LawTitle.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{form.LawTitle(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>文号：</h5>
+                        {% if form.LawFileNo.errors %}
+                        {% for e in form.LawFileNo.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{form.LawFileNo(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>法规分类</h5>
+                        {% if form.LawType.errors %}
+                        {% for e in form.LawType.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawType(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>发规发布/生效日期：</h5>
+                        {% if form.LawPublishDate.errors %}
+                        {% for e in form.LawPublishDate.errors %}
+                        <p class="help-block"><font color="red">发规发布/生效日期：{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawPublishDate(class_='datetimepicker-days',type='date')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>废止日期：(若未废止则不填)</h5>
+                        {% if form.LawAbolishDate.errors %}
+                        {% for e in form.LawAbolishDate.errors %}
+                        <p class="help-block"><font color="red">废止日期：(若未废止则不填){{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawAbolishDate(class_='datetimepicker-days',type='date')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>法规正文</h5>
+                        {% if form.LawContent.errors %}
+                        {% for e in form.LawContent.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawContent}}
+                    </div>
+                    <p>
+                        <div class="list-group-item-text">
+                            <input class="btn btn-primary" type="submit" value="提交" />
+
+                        </div>
+                    </p>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
 </div>
 {% endblock%}
  {% block scripts %}
 <script>
-    CKEDITOR.replace('editor1');
+    CKEDITOR.replace('LawContent');
 </script>
 
 {% endblock %}

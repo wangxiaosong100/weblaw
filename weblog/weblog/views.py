@@ -4,8 +4,8 @@ from datetime import datetime
 from flask import render_template,url_for
 from flask import redirect,flash,session,g
 from weblog import app
-from weblog.forms import SearchForm,LoginForm,RegisterForm
-from weblog.MongoDB_Models import User,Post
+from weblog.forms import SearchForm,LoginForm,RegisterForm,newLawForm
+from weblog.MongoDB_Models import User,Post,Law
 
 @app.before_request
 def before_request():
@@ -19,9 +19,11 @@ def before_request():
 def home():
     """Renders the home page."""
     form=SearchForm()
+    laws=Law.objects().all()
     return render_template(
         'index.html',
         title='主页',
+        laws=laws,
         year=datetime.now().year,
         form=form
     )
@@ -110,9 +112,27 @@ def register():
         form=form
         )
 
-@app.route('/new')
+@app.route('/new',methods=['GET', 'POST'])
 def new():
-    return render_template('new.html')
+    form=newLawForm()
+    if form.validate_on_submit():
+        newlaw=Law()
+        print('HERE')
+        newlaw.LawTitle=form.LawTitle.data
+        newlaw.LawFileNo=form.LawFileNo.data
+        newlaw.LawType=form.LawType.data
+        newlaw.LawPublishDate=form.LawPublishDate.data
+        newlaw.LawAbolishDate=form.LawAbolishDate.data
+        newlaw.LawContent=form.LawContent.data
+        #newlaw.LawTags=form.LawTags.data
+        newlaw.save()
+        flash('新增成功')
+    return render_template(
+        'new.html',
+        form=form,
+        year=datetime.now().year,
+        title='新增法律法规'
+        )
 
 @app.route('/contact')
 def contact():

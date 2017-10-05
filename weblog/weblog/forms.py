@@ -9,7 +9,9 @@ from wtforms import (
     PasswordField,
     BooleanField,
     SelectField,
-    FileField
+    FileField,
+    DateField,
+    DateTimeField
     )
 from wtforms.validators import DataRequired,Length,EqualTo,URL
 
@@ -91,12 +93,20 @@ class newLawForm(Form):
         DataRequired(),
         Length(max=255)
         ])
-    LawTypetype=SelectField('法规分类',choices=[
-        ('Blog','文字'),
-        ('VideoBlog','视频'),
-        ('ImageBlog','图片'),
-        ('QuoteBlog','Quto')
+    LawType=SelectField('法规分类',choices=[
+        ('Comprehensive','综合'),
+        ('Audit','审计'),
+        ('Finance','财政财务'),
+        ('Tax','税收'),
+        ('Financial','金融'),
+        ('Enterprise','企业'),
+        ('Communist','党内规章规制度')
         ])
+    LawPublishDate=DateField('发布日期',[DataRequired()])
+    LawAbolishDate=DateField('废止日期')
+    LawContent=TextAreaField('法规正文',[DataRequired()])
+    LawTags=StringField('标签')
+
 class PostForm(Form):
     title=StringField('Title',[
         DataRequired(),

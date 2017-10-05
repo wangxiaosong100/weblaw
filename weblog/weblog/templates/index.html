@@ -32,36 +32,25 @@
                         <div class="list-unstyled">
                             最新更新
                         </div>
+                        {% if laws %}
+                        {% for law in laws %}
                         <div class="list-group-item">
+                            
                             <div class="list-group-item-heading">
-                                Head
+                                {{law.LawTitle}}&nbsp;&nbsp;文号：{{law.LawFileNo}}&nbsp;&nbsp;分类：
+                                {% if law.LawType %}
+                                {{law.LawType}}
+                                {% else %}
+                                未分类
+                                {% endif %}
                             </div>
-                            <div class="list-group-item-text">
-                                <p>
-                                    this is a test
-                                </p>
+                            <div class="list-group-item-text" id="LawContent">
+                                {{law.LawContent}}
                             </div>
+                            
                         </div>
-                        <div class="list-group-item">
-                            <div class="list-group-item-heading">
-                                Head
-                            </div>
-                            <div class="list-group-item-text">
-                                <p>
-                                    this is a test
-                                </p>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="list-group-item-heading">
-                                Head
-                            </div>
-                            <div class="list-group-item-text">
-                                <p>
-                                    this is a test
-                                </p>
-                            </div>
-                        </div>
+                        {% endfor %}
+                        {% endif %}                        
                     </div>
             </div>
             <div class="col-lg-1">
@@ -90,4 +79,10 @@
             </div>
         </div>
     </div>
+{% endblock %}
+ {% block scripts %}
+<script>
+    CKEDITOR.replace('LawContent');
+</script>
+
 {% endblock %}

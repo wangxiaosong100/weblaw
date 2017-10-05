@@ -30,7 +30,24 @@ class Comment(mongo.EmbeddedDocument):
 
     def __repr__(self):
         return "<Comment '{}'>".format(self.text[:15])
-
+class Law(mongo.Document):
+    LawTitle=mongo.StringField(required=True)
+    LawFileNo=mongo.StringField(required=True)
+    LawType=mongo.StringField(required=True)
+    LawPublishDate=mongo.DateTimeField()
+    LawAbolishDate=mongo.DateTimeField()
+    LawContent=mongo.StringField(required=True)
+    LawTags=mongo.ListField(mongo.StringField())
+    Lawcomments=mongo.ListField(
+        mongo.EmbeddedDocumentField(Comment)
+        )
+    user=mongo.ReferenceField(User)
+    def __repr__(self):
+        return "<Law '{}'>".format(self.LawTitle)
+    def get_commentslen(self):
+        return len(self.Lawcomments)
+    def get_tags(self):
+        return len(self.LawTags)
 class Post(mongo.Document):
     title=mongo.StringField(required=True)
     publish_date=mongo.DateTimeField(
