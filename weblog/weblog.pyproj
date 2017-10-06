@@ -586,6 +586,7 @@
     <Content Include="weblog\static\scripts\_references.js" />
     <Content Include="weblog\templates\about.html" />
     <Content Include="weblog\templates\contact.html" />
+    <Content Include="weblog\templates\detail.html" />
     <Content Include="weblog\templates\index.html" />
     <Content Include="weblog\templates\layout.html" />
     <Content Include="weblog\templates\login.html" />

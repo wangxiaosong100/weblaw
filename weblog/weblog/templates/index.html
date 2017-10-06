@@ -1,9 +1,11 @@
-﻿{% extends "layout.html" %}
+﻿
+{% extends "layout.html" %}
 {% block content %}
+
 <div class="container">
     <div class="jumbotron">
         <div class="row">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <img src="{% if g.current_user %}
                              ../static/image/{{g.current_user.user_head}}
                           {% else %}
@@ -27,7 +29,7 @@
         </div>
     </div>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                     <div class="list-group">
                         <div class="list-unstyled">
                             最新更新
@@ -37,52 +39,39 @@
                         <div class="list-group-item">
                             
                             <div class="list-group-item-heading">
-                                {{law.LawTitle}}&nbsp;&nbsp;文号：{{law.LawFileNo}}&nbsp;&nbsp;分类：
-                                {% if law.LawType %}
-                                {{law.LawType}}
-                                {% else %}
-                                未分类
-                                {% endif %}
+                                <h4><a href="{{url_for('detail',law_id=law.id)}}">标题：&nbsp;&nbsp;{{law.LawTitle}}</a></h4>
+                                <p>
+                                    <h5>
+                                        文号：{{law.LawFileNo}}&nbsp;&nbsp;&nbsp;&nbsp;分类：
+                                        {% if law.LawType %}
+                                        {{law.LawType}}
+                                        {% else %}
+                                        未分类
+                                        {% endif %}
+                                    </h5>
+                                </p>
                             </div>
                             <div class="list-group-item-text" id="LawContent">
-                                {{law.LawContent}}
+                                
+                                    <div class="btn btn-link"><a href="{{url_for('detail',law_id=law.id)}}">查看详细</a></div> 
+                           
+                                
                             </div>
                             
                         </div>
                         {% endfor %}
                         {% endif %}                        
                     </div>
+                <div>
+                </div>
             </div>
-            <div class="col-lg-1">
-
-            </div>
-            <div class="col-lg-3">
-                    <div class="list-group">
-                        <div class="list-group-item-heading">
-                            Hotest
-                        </div>
-                        <div class="list-group-item">
-                            <div class="list-group-item-heading">
-                                test
-                            </div>
-                            <div class="list-group-item-text">
-                                test
-                            </div>
-                            <div class="list-group-item-heading">
-                                test
-                            </div>
-                            <div class="list-group-item-text">
-                                test
-                            </div>
-                        </div>
-                    </div>
-            </div>
+            
         </div>
     </div>
 {% endblock %}
  {% block scripts %}
 <script>
-    CKEDITOR.replace('LawContent');
+    CKEDITOR.replace('LawContent1');
 </script>
 
 {% endblock %}

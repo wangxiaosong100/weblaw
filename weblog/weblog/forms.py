@@ -94,13 +94,13 @@ class newLawForm(Form):
         Length(max=255)
         ])
     LawType=SelectField('法规分类',choices=[
-        ('Comprehensive','综合'),
-        ('Audit','审计'),
-        ('Finance','财政财务'),
-        ('Tax','税收'),
-        ('Financial','金融'),
-        ('Enterprise','企业'),
-        ('Communist','党内规章规制度')
+        ('综合','综合'),
+        ('审计','审计'),
+        ('财政财务','财政财务'),
+        ('税收','税收'),
+        ('金融','金融'),
+        ('企业','企业'),
+        ('党内规章规制度','党内规章规制度')
         ])
     LawPublishDate=DateField('发布日期',[DataRequired()])
     LawAbolishDate=DateField('废止日期')

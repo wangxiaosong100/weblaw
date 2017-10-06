@@ -61,10 +61,19 @@
                         {% endif %}
                         {{ form.LawContent}}
                     </div>
+                    <div class="list-group-item-text">
+                        <h5>标签(多个标签以空格分隔):</h5>
+                        {% if form.LawTags.errors %}
+                        {% for e in form.LawTags.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawTags(class_='form-control')}}
+                    </div>
                     <p>
                         <div class="list-group-item-text">
                             <input class="btn btn-primary" type="submit" value="提交" />
-
+                            <input class="btn btn-primary" type="button" onclick="OnSave" value="获取内容" />
                         </div>
                     </p>
                 </div>
@@ -77,7 +86,20 @@
 {% endblock%}
  {% block scripts %}
 <script>
-    CKEDITOR.replace('LawContent');
+    CKEDITOR.replace('LawContent', {
+        filebrowserUploadUrl: '/ckupload/',
+    });
+    
+</script>
+<script type="text/javascript">
+    function OnSave() {
+        if (CKEDITOR.instances.LawContent.getData() == "") {
+            alert("内容不能为空！");
+            return false;
+        } else {
+            alert(CKEDITOR.instances.LawContent.getData());
+        }
+    }
 </script>
 
 {% endblock %}
