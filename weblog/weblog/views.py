@@ -16,11 +16,19 @@ def before_request():
     else:
         g.current_user=None  
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'),404
+
 @app.route('/')
 @app.route('/home')
 def home():
     """Renders the home page."""
     form=SearchForm()
+    if form.validate_on_submit():
+        keywords=form.content.data
+        #result=search.whoosh_search(Law,query=keyword,fields=['LawContent'],limit=20)
+        #return result
     laws=Law.objects.order_by("-time").all()
     return render_template(
         'index.html',
@@ -29,6 +37,21 @@ def home():
         year=datetime.now().year,
         form=form
     )
+
+@app.route('/type/<string:law_type>')
+def type(law_type='ALL'):
+    form=SearchForm()
+    if law_type=='ALL':
+        laws=Law.objects.order_by("-time").all()
+    else:
+        laws=Law.objects(LawType=law_type).order_by("-time").all()
+    return render_template(
+        'index.html',
+        title='主页',
+        laws=laws,
+        year=datetime.now().year,
+        form=form)
+
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     form=LoginForm()
@@ -86,6 +109,62 @@ def register():
         'register.html',
         form=form
         )
+
+
+@app.route('/edit/<string:law_id>',methods=['GET', 'POST'])
+def edit(law_id):
+    if  not g.current_user:
+        flash('需要登录才能新增法规',category="danger")
+        return redirect(url_for('login'))
+    form=newLawForm()
+    law=Law.objects(id=law_id).first()
+    form.LawTitle.data=law.LawTitle
+    form.LawFileNo.data=law.LawFileNo
+    form.LawType.data=law.LawType
+    form.LawPublishDate.data=law.LawPublishDate
+    form.LawContent.data=law.LawContent
+    form.LawMark.data=law.LawMark
+    ss=""
+    for s in law.LawTags:
+        ss=ss+" "+s
+    form.LawTags.data=ss
+    if form.validate_on_submit():
+        fromcomment=CommentForm()
+        law_tags=form.LawTags.data
+        taglist=law_tags.split()
+        result=Law.objects(id=law_id).update(
+            LawTitle=form.LawTitle.data,
+            LawFileNo=form.LawFileNo.data,
+            LawType=form.LawType.data,
+            LawPublishDate=form.LawPublishDate.data,
+            LawContent=form.LawContent.data,
+            LawMark=form.LawMark.data,
+            LawTags=taglist
+            )
+        print("AAAUPDATE"+str(result))
+        lawupdate=Law.objects(id=law_id).first()
+        comments=lawupdate.Lawcomments
+        tags=lawupdate.LawTags
+        return render_template(
+        'detail.html',
+        law=lawupdate,
+        form=fromcomment,
+        comments=comments,
+        tags=tags,
+        title='法规详细信息',
+        year=datetime.now().year
+        )
+        
+    return render_template(
+        'edit.html',
+        form=form,
+        law=law,
+        year=datetime.now().year,
+        title='修改法规'
+        )
+
+
+
 @app.route('/detail/<string:law_id>',methods=['GET', 'POST'])
 def detail(law_id):
     form=CommentForm()

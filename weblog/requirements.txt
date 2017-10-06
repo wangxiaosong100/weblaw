@@ -13,3 +13,7 @@ flask-restful
 celery
 flask-celery-helper
 HTMLParser
+Flask-WhooshAlchemy
+flask_whooshalchemyplus
+jieba
+flask_msearch 

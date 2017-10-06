@@ -6,7 +6,7 @@
             <div class="list-group">
                 <div class="list-group-item">
                     <div class="list-group-item-heading" style="align-content:center">
-                        <h3><p style="text-align:center"> {{law.LawTitle}}</p></h3>
+                        <h3><p style="text-align:center"> <a href="{{url_for('edit',law_id=law.id)}}"> {{law.LawTitle}}</a></p></h3>
                         <h4>
                             <p style="text-align:center">
                                 文号：&nbsp;&nbsp;{{law.LawFileNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

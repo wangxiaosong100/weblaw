@@ -18,6 +18,10 @@ class DevConfig(Config):
     ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
     MAX_CONTENT_LENGTH = 4 * 1024 * 1024  # 4MB
 
+    WHOOSH_BASE = 'whoosh_index'
+    WHOOSH_ENABLE = True
+    MSEARCH_BACKEND='whoosh'
+
     MONGODB_SETTINGS={
        'db':'local',
        'host':'localhost',

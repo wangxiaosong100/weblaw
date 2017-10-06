@@ -1,8 +1,6 @@
 ﻿from flask_mongoengine import MongoEngine
 import datetime
-
 mongo=MongoEngine()
-
 available_roles=('admin','poster','default')
 
 class User(mongo.Document):
@@ -31,6 +29,9 @@ class Comment(mongo.EmbeddedDocument):
     def __repr__(self):
         return "<Comment '{}'>".format(self.text[:15])
 class Law(mongo.Document):
+    __tablename__='Law'
+    __searchable__ = ['LawTitle', 'LawFileNo','LawContent']
+
     LawTitle=mongo.StringField(required=True)
     LawFileNo=mongo.StringField(required=True)
     LawType=mongo.StringField(required=True)
@@ -49,6 +50,8 @@ class Law(mongo.Document):
         return len(self.Lawcomments)
     def get_tags(self):
         return len(self.LawTags)
+
+
 class Post(mongo.Document):
     title=mongo.StringField(required=True)
     publish_date=mongo.DateTimeField(
