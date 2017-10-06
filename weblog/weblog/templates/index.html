@@ -7,12 +7,12 @@
         <div class="row">
             <div class="col-lg-12">
                 <img src="{% if g.current_user %}
-                             ../static/image/{{g.current_user.user_head}}
+                             ../static/image/userface/{{g.current_user.user_head}}
                           {% else %}
                             ../static/image/anomose.jpg
                           {% endif %}
                          "
-                     class="img-thumbnail" width="64" height="64" />
+                     class="img-circle" width="84" height="84" />
                 <h4>
                     {% if g.current_user %}
                     {{ g.current_user.username }}

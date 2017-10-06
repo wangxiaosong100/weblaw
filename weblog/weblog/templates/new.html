@@ -43,15 +43,7 @@
                         {% endif %}
                         {{ form.LawPublishDate(class_='datetimepicker-days',type='date')}}
                     </div>
-                    <div class="list-group-item-text">
-                        <h5>废止日期：(若未废止则不填)</h5>
-                        {% if form.LawAbolishDate.errors %}
-                        {% for e in form.LawAbolishDate.errors %}
-                        <p class="help-block"><font color="red">废止日期：(若未废止则不填){{e}}</font></p>
-                        {% endfor %}
-                        {% endif %}
-                        {{ form.LawAbolishDate(class_='datetimepicker-days',type='date')}}
-                    </div>
+                    
                     <div class="list-group-item-text">
                         <h5>法规正文</h5>
                         {% if form.LawContent.errors %}
@@ -69,6 +61,15 @@
                         {% endfor %}
                         {% endif %}
                         {{ form.LawTags(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>备注：(可以备注法规的废止日期等)</h5>
+                        {% if form.LawMark.errors %}
+                        {% for e in form.LawMark.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.LawMark(class_='form-control')}}
                     </div>
                     <p>
                         <div class="list-group-item-text">

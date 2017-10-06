@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap-datetimepicker.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
    
+
     <script src="../static/ckeditor/ckeditor.js"></script>
     <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
@@ -128,7 +129,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{url_for('login')}}">登录</a></li>
-                                <li><a href="#">注册</a></li>
+                                <li><a href="{{url_for('register')}}">注册</a></li>
                                 {% if g.current_user %}
                                 <li><a href="{{url_for('logout')}}">退出</a></li>
                                 {% endif %}
@@ -156,7 +157,7 @@
         {% block content %}{% endblock %}       
         <hr />
         <footer>
-            <p>&copy; {{ year }} - 审计法规库</p>
+            <p>&copy; {{ year }} - 审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}">联系我们</a></p>
         </footer>
     </div>
 

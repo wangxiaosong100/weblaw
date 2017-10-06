@@ -35,12 +35,13 @@ class Law(mongo.Document):
     LawFileNo=mongo.StringField(required=True)
     LawType=mongo.StringField(required=True)
     LawPublishDate=mongo.DateTimeField()
-    LawAbolishDate=mongo.DateTimeField()
+    LawMark=mongo.StringField()
     LawContent=mongo.StringField(required=True)
     LawTags=mongo.ListField(mongo.StringField())
     Lawcomments=mongo.ListField(
         mongo.EmbeddedDocumentField(Comment)
         )
+    time=mongo.DateTimeField()
     user=mongo.ReferenceField(User)
     def __repr__(self):
         return "<Law '{}'>".format(self.LawTitle)

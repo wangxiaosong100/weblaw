@@ -752,7 +752,7 @@ pre code {
 }
 
 .pre-scrollable {
-  max-height: 340px;
+  max-height: 680px;
   overflow-y: scroll;
 }
 

@@ -10,7 +10,7 @@
         <div class="col-lg-8">
             <h4>用户注册</h4>
             <div class="list-group">
-                <form method="post" action="{{url_for('.register')}}">
+                <form method="post" action="{{url_for('.register')}}" enctype="multipart/form-data">
                     {{form.hidden_tag()}}
                     <div class="list-group-item">
                         <div class="list-group-item-text">

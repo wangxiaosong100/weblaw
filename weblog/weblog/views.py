@@ -7,9 +7,7 @@ from weblog import app
 from weblog.forms import SearchForm,LoginForm,RegisterForm,newLawForm,CommentForm
 from weblog.MongoDB_Models import User,Post,Law,Comment
 import os,re,random
-from os import path
-from html.parser import HTMLParser
-
+from os import path,pardir
 
 @app.before_request
 def before_request():
@@ -23,7 +21,7 @@ def before_request():
 def home():
     """Renders the home page."""
     form=SearchForm()
-    laws=Law.objects().all()
+    laws=Law.objects.order_by("-time").all()
     return render_template(
         'index.html',
         title='主页',
@@ -66,9 +64,19 @@ def register():
     form=RegisterForm()
     if form.validate_on_submit():        
         new_user=User()
+
+        file=request.files['user_head_image']
+        extention=str(file.filename).split('.')[1]
+        p=app.static_folder+'/image/userface/'+form.username.data+'.'+extention
+
         new_user.username=form.username.data
         new_user.password=form.password.data
+        new_user.user_head=form.username.data+'.'+extention
+        
+        print(p)
+        file.save(p)
         new_user.save()
+
         flash('注册成功，请登录.',category="success")
         return redirect(url_for('.login'))
     form.username.data=""
@@ -89,13 +97,14 @@ def detail(law_id):
         new_comment.date=datetime.now()
         update_law.Lawcomments.append(new_comment)
         update_law.save()
+        return redirect(url_for('detail',law_id=law_id))
     form.name.data=""
     form.text.data=""
     law=Law.objects(id=law_id).first()
     tags=law.LawTags
     comments=law.Lawcomments
 
-    #return (WriteHtml(law))
+    #return (WriteHtml(law,form))
     return render_template(
         'detail.html',
         law=law,
@@ -108,6 +117,9 @@ def detail(law_id):
 
 @app.route('/new',methods=['GET', 'POST'])
 def new():
+    if  not g.current_user:
+        flash('需要登录才能新增法规',category="danger")
+        return redirect(url_for('login'))
     form=newLawForm()
     if form.validate_on_submit():
         law_tags=form.LawTags.data
@@ -117,9 +129,11 @@ def new():
         newlaw.LawFileNo=form.LawFileNo.data
         newlaw.LawType=form.LawType.data
         newlaw.LawPublishDate=form.LawPublishDate.data
-        newlaw.LawAbolishDate=form.LawAbolishDate.data
+        newlaw.LawMark=form.LawMark.data
         newlaw.LawContent=form.LawContent.data
         newlaw.LawTags=taglist
+        newlaw.time=datetime.now()
+        newlaw.user=g.current_user
         newlaw.save()
         flash('新增成功')
         return redirect(url_for('home'))
@@ -135,9 +149,9 @@ def contact():
     """Renders the contact page."""
     return render_template(
         'contact.html',
-        title='Contact',
+        title='联系我们',
         year=datetime.now().year,
-        message='Your contact page.'
+        message='您可以通过以下方式联系到我们.'
     )
 
 @app.route('/about')
@@ -189,172 +203,3 @@ def ckupload():
       response = make_response(res)
       response.headers["Content-Type"] = "text/html"
       return response
-
-#def filter_tag(htmlstr):  
-#    re_cdata = re.compile('<!DOCTYPE HTML PUBLIC[^>]*>', re.I)  
-#    re_script = re.compile('<\s*script[^>]*>[^<]*<\s*/\s*script\s*>', re.I) #过滤脚本  
-#    re_style = re.compile('<\s*style[^>]*>[^<]*<\s*/\s*style\s*>', re.I) #过滤style  
-#    re_br = re.compile('<br\s*?/?>')  
-#    re_h = re.compile('</?\w+[^>]*>')  
-#    re_comment = re.compile('<!--[\s\S]*-->')  
-#    s = re_cdata.sub('', htmlstr)  
-#    s = re_script.sub('', s)  
-#    s=re_style.sub('',s)  
-#    s=re_br.sub('\n',s)  
-#    s=re_h.sub(' ',s)  
-#    s=re_comment.sub('',s)  
-#    blank_line=re.compile('\n+')  
-#    s=blank_line.sub('\n',s)  
-#    s=re.sub('\s+',' ',s)  
-#    #s=replaceCharEntity(s)  
-#    return s  
-
-def WriteHtml(law:Law):
-    message="""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>%s - 审计法规库</title>
-    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap-datetimepicker.css" />
-    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
-   
-    <script src="../static/ckeditor/ckeditor.js"></script>
-    <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
-    <script src="/static/scripts/modernizr-2.6.2.js"></script>
-</head>
-<body>
-<div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <label class="btn-toolbar"><img src="../static/image/logo.jpg" width="50" height="50" class="img-circle"/></label>
-                <label class="btn-toolbar">&nbsp;</label>
-            </div>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">审计法规库</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            综合 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">宪政</a></li>
-                            <li><a href="#">行政</a></li>
-                            <li><a href="#">行事</a></li>
-                            <li><a href="#">民事</a></li>
-                        </ul>
-                    </li>
-                        
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            审计 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">国家审计</a></li>
-                            <li><a href="#">内部审计</a></li>
-                            <li><a href="#">注册会计师</a></li>
-                            <li><a href="#">其他</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            财政财务 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">综合</a></li>
-                            <li><a href="#">行政</a></li>
-                            <li><a href="#">事业</a></li>
-                            <li><a href="#">海关</a></li>
-                            <li><a href="#">农业</a></li>
-                            <li><a href="#">社保</a></li>
-                            <li><a href="#">外资</a></li>
-                            <li><a href="#">基建</a></li>
-                            <li><a href="#">其也</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            税收 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">综合</a></li>
-                            <li><a href="#">征管</a></li>
-                            <li><a href="#">流转税</a></li>
-                            <li><a href="#">所得税</a></li>
-                            <li><a href="#">其他税费</a></li>
-                            <li><a href="#">其他</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            金融 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">综合</a></li>
-                            <li><a href="#">商业银行</a></li>
-                            <li><a href="#">政策性银行</a></li>
-                            <li><a href="#">证券期货</a></li>
-                            <li><a href="#">保险</a></li>                          
-                            <li><a href="#">其也</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            企业 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">综合</a></li>
-                            <li><a href="#">工业</a></li>
-                            <li><a href="#">贸易</a></li>
-                            <li><a href="#">交通运输</a></li>
-                            <li><a href="#">建设</a></li>
-                            <li><a href="#">信息邮政</a></li>
-                            <li><a href="#">军工</a></li>
-                            <li><a href="#">三资</a></li>
-                            <li><a href="#">其也</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url_for('contact') }}">党内规章制度</a></li>
-                </ul>
-            </div>
-                   
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="list-group">
-                <div class="list-group-item">
-                    <div class="list-group-item-heading" style="align-content:center">
-                        <h3><p style="text-align:center"> %s </p></h3>
-                        <p style="text-align:center">
-                            文号：%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            分类：%s
-                        </p>
-                    </div>
-                    <div class="list-group-item-text">   
-                        <pre>
-                            %s
-                        </pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    </body></html>"""%('法规浏览',law.LawTitle,law.LawFileNo,law.LawType,law.LawContent)
-    return message

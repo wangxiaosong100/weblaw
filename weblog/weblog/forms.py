@@ -26,7 +26,7 @@ class CommentForm(Form):
           'Name',
           validators=[DataRequired(),Length(max=255)]
           )
-      text=TextAreaField(u'Comment',validators=[DataRequired()])
+      text=TextAreaField(u'Comment',validators=[DataRequired(),Length(max=1000)])
 
 class LoginForm(Form):
     username=StringField('Username',[
@@ -83,6 +83,9 @@ class RegisterForm(Form):
                 '用户名:'+self.username.data+' 已经存在请重新输入用户名'
                 )
             return False
+        #if not '.' not in self.user_head_image.:
+        #    self.user_head_image.errors.append('文件名非法')
+        #    return False
         return True
 
 class newLawForm(Form):
@@ -103,7 +106,7 @@ class newLawForm(Form):
         ('党内规章规制度','党内规章规制度')
         ])
     LawPublishDate=DateField('发布日期',[DataRequired()])
-    LawAbolishDate=DateField('废止日期')
+    LawMark=StringField('备注')
     LawContent=TextAreaField('法规正文',[DataRequired()])
     LawTags=StringField('标签')
 
