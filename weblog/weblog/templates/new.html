@@ -1,75 +1,75 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-10">
+        
+        <div class="col-lg-12">
             <form method="post" action="{{url_for('new')}}">
-                {{form.hidden_tag()}}
+                {{newform.hidden_tag()}}
                 <div class="list-group-item">
                     <div class="list-group-item-text">
                         <h5>标题:</h5>
-                        {% if form.LawTitle.errors %}
-                        {% for e in form.LawTitle.errors%}
+                        {% if newform.LawTitle.errors %}
+                        {% for e in newform.LawTitle.errors%}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{form.LawTitle(class_='form-control')}}
+                        {{newform.LawTitle(class_='form-control')}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>文号：</h5>
-                        {% if form.LawFileNo.errors %}
-                        {% for e in form.LawFileNo.errors%}
+                        {% if newform.LawFileNo.errors %}
+                        {% for e in newform.LawFileNo.errors%}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{form.LawFileNo(class_='form-control')}}
+                        {{newform.LawFileNo(class_='form-control')}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>法规分类</h5>
-                        {% if form.LawType.errors %}
-                        {% for e in form.LawType.errors %}
+                        {% if newform.LawType.errors %}
+                        {% for e in newform.LawType.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawType(class_='form-control')}}
+                        {{ newform.LawType(class_='form-control')}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>发规发布/生效日期：</h5>
-                        {% if form.LawPublishDate.errors %}
-                        {% for e in form.LawPublishDate.errors %}
+                        {% if newform.LawPublishDate.errors %}
+                        {% for e in newform.LawPublishDate.errors %}
                         <p class="help-block"><font color="red">发规发布/生效日期：{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawPublishDate(class_='datetimepicker-days',type='date')}}
+                        {{ newform.LawPublishDate(class_='datetimepicker-days',type='date')}}
                     </div>
                     
                     <div class="list-group-item-text">
                         <h5>法规正文</h5>
-                        {% if form.LawContent.errors %}
-                        {% for e in form.LawContent.errors %}
+                        {% if newform.LawContent.errors %}
+                        {% for e in newform.LawContent.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawContent}}
+                        {{ newform.LawContent}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>标签(多个标签以空格分隔):</h5>
-                        {% if form.LawTags.errors %}
-                        {% for e in form.LawTags.errors %}
+                        {% if newform.LawTags.errors %}
+                        {% for e in newform.LawTags.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawTags(class_='form-control')}}
+                        {{ newform.LawTags(class_='form-control')}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>备注：(可以备注法规的废止日期等)</h5>
-                        {% if form.LawMark.errors %}
-                        {% for e in form.LawMark.errors %}
+                        {% if newform.LawMark.errors %}
+                        {% for e in newform.LawMark.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawMark(class_='form-control')}}
+                        {{ newform.LawMark(class_='form-control')}}
                     </div>
                     <p>
                         <div class="list-group-item-text">
@@ -81,7 +81,7 @@
             </form>
 
         </div>
-        <div class="col-lg-1"></div>
+        
     </div>
 </div>
 {% endblock%}

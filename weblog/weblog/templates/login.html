@@ -1,4 +1,4 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <script language="javascript" type="text/javascript">
     function redirect()
@@ -18,36 +18,36 @@
         <div class="col-lg-4">
             <div class="list-group">
                 <form method="post" action="{{url_for('.login')}}">
-                    {{form.hidden_tag()}}
+                    {{loginform.hidden_tag()}}
                     <div class="list-group-item">
                             <div class="list-group-item-text">
                                 <h5>用户名:</h5>
-                                {% if form.username.errors %}
-                                {% for e in form.username.errors%}
+                                {% if loginform.username.errors %}
+                                {% for e in loginform.username.errors%}
                                 <p class="help-block"><font color="red">{{e}}</font></p>
                                 {% endfor %}
                                 {% endif %}
-                                {{form.username(class_='form-control')}}
+                                {{loginform.username(class_='form-control')}}
                             </div>
                             <div class="list-group-item-text">
                                 <h5>密 码:</h5>
-                                {% if form.password.errors %}
-                                {% for e in form.password.errors %}
+                                {% if loginform.password.errors %}
+                                {% for e in loginform.password.errors %}
                                 <p class="help-block"><font color="red">{{e}}</font></p>
                                 {% endfor %}
                                 {% endif %}
-                                {{ form.password(class_='form-control')}}
+                                {{ loginform.password(class_='form-control')}}
                             </div>
                         <p></p>
                             <div class="list-group-item-text">
                                 <!--
                                 <div class="col-lg-2">
-                                    {% if form.remember.errors %}
-                                    {% for e in form.remember.errors %}
+                                    {% if loginform.remember.errors %}
+                                    {% for e in loginform.remember.errors %}
                                     <p class="help-block"><font color="red">{{e}}</font></p>
                                     {% endfor %}
                                     {% endif %}
-                                    {{ form.remember(class_='form-control',value='记住我')}}
+                                    {{ loginform.remember(class_='form-control',value='记住我')}}
                                     记住我
                                 </div>-->
                                 <!--<div class="list-group-item-text">-->

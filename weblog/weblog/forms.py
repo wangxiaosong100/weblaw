@@ -18,8 +18,13 @@ from wtforms.validators import DataRequired,Length,EqualTo,URL
 class SearchForm(Form):
     content=StringField(
         'content',
-        validators=[Length(max=255)]
+        [DataRequired(),Length(max=255)]
         )
+    searchtype=SelectField('搜索类型',choices=[
+        ('LawTitle','标题'),
+        ('LawFileNo','文号'),
+        ('LawContent','内容')
+        ])
 
 class CommentForm(Form):
       name=StringField(
@@ -103,7 +108,7 @@ class newLawForm(Form):
         ('税收','税收'),
         ('金融','金融'),
         ('企业','企业'),
-        ('党内规章规制度','党内规章规制度')
+        ('党内规章制度','党内规章制度')
         ])
     LawPublishDate=DateField('发布日期',[DataRequired()])
     LawMark=StringField('备注')

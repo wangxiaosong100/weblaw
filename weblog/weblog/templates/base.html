@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ title }} - 审计法规库</title>
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <link href="../static/bootstrap-treeview-1.2.0/src/css/bootstrap-treeview.css" rel="stylesheet" />
+    <script src="../static/bootstrap-treeview-1.2.0/src/js/bootstrap-treeview.js"></script>
+    <script src="../static/ckeditor/ckeditor.js"></script>
+    <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <label class="btn-toolbar"><img src="../static/image/logo.jpg" width="80" height="80" class="img-circle" /></label>
+                <label class="btn-toolbar">&nbsp;</label>
+            </div>
+            <div class="navbar-header">
+                <h1><a href="/" class="navbar-brand">审计法规库</a></h1> 
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><img src="{% if g.current_user %}
+                             ../static/image/userface/{{g.current_user.user_head}}
+                          {% else %}
+                            ../static/image/anomose.jpg
+                          {% endif %}
+                         "
+                           class="img-circle" width="80" height="80" />
+                        <font color="blue">
+                            {% if g.current_user %}
+                            {{g.current_user.username}}
+                            {% else %}
+                            游客
+                            {% endif %}
+                        </font>
+                        
+                    </li>
+                    <li><a href="{{url_for('login')}}"><h4>登录</h4></a></li>
+                    <li><a href="{{url_for('register')}}"><h4>注册</h4></a></li>
+                    {% if g.current_user %}
+                    <li><a href="{{url_for('logout')}}"><h4>退出</h4></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    {% with messages=get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category,message in messages %}
+    <div class="alert alert-{{category}} alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+    <div class="container body-content">
+        <div class="col-lg-12">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="list-group-item-text" style="text-align:center">
+                        <form method="post" action="{{url_for('searchLaw')}}">
+                            {% if form.content.errors %}
+                            {% for e in form.content.errors %}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{form.content(_class='form-control')}}
+                            {% if form.searchtype.errors %}
+                            {% for e in form.searchtype.errors %}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{form.searchtype(_class='form-control')}}
+                            <input type="submit" class="btn-primary" value="搜一下" />
+                        </form>
+                           
+                        
+                        <div class="col-lg-1">
+                            
+                        </div>
+                    </div>
+                </div>
+        </div>
+     </div>
+        {% block content %}{% endblock %}
+        <hr />
+        <footer>
+            <p>&copy; {{ year }} - 审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}">联系我们</a></p>
+        </footer>
+    </div>
+
+    <script src="/static/scripts/jquery-1.10.2.js"></script>
+    <script src="/static/scripts/bootstrap.js"></script>
+    <script src="/static/scripts/respond.js"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,21 +1,21 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 
 {% block content %}
+<div class="container">
+    <h2>{{ title }}.</h2>
+    <h3>{{ message }}</h3>
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+    <address>
+        中国●云南省●昆明市五华区华山南路78<br />
+        云南省审计厅 <br />
+        邮编：650021<br />
+        <abbr title="Phone">联系电话:</abbr>
+        0871-63637447(内线：8447)
+    </address>
 
-<address>
-    中国●云南省●昆明市五华区华山南路78<br />
-    云南省审计厅 <br />
-    邮编：650021<br />
-    <abbr title="Phone">联系电话:</abbr>
-    0871-63637447(内线：8447)
-</address>
-
-<address>
-    <strong>技术支持：</strong>   <a href="mailto:wangxiaosong100@126.com">126邮箱</a><br />
-   <strong>内部邮箱：</strong><a href="mailto:wangxs@ynaudit.gov.cn">汪小松内部邮箱</a>
-</address>
-
+    <address>
+        <strong>技术支持：</strong>   <a href="mailto:wangxiaosong100@126.com">126邮箱</a><br />
+        <strong>内部邮箱：</strong><a href="mailto:wangxs@ynaudit.gov.cn">汪小松内部邮箱</a>
+    </address>
+</div>
 {% endblock %}

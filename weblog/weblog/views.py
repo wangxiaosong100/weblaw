@@ -5,7 +5,7 @@ from flask import render_template,url_for,request,make_response
 from flask import redirect,flash,session,g
 from weblog import app
 from weblog.forms import SearchForm,LoginForm,RegisterForm,newLawForm,CommentForm
-from weblog.MongoDB_Models import User,Post,Law,Comment
+from weblog.MongoDB_Models import User,Law,Comment
 import os,re,random
 from os import path,pardir
 
@@ -18,55 +18,55 @@ def before_request():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html'),404
+    form=SearchForm()
+    return render_template('page_not_found.html',form=form),404
 
 @app.route('/')
-@app.route('/home')
-def home():
-    """Renders the home page."""
+@app.route('/default')
+def default():
     form=SearchForm()
-    if form.validate_on_submit():
-        keywords=form.content.data
-        #result=search.whoosh_search(Law,query=keyword,fields=['LawContent'],limit=20)
-        #return result
-    laws=Law.objects.order_by("-time").all()
-    return render_template(
-        'index.html',
-        title='主页',
-        laws=laws,
-        year=datetime.now().year,
-        form=form
-    )
+    return render_template('default.html',form=form,year=datetime.now().year)
 
-@app.route('/type/<string:law_type>')
-def type(law_type='ALL'):
+@app.route('/listlaw/<string:type>')
+def listlaw(type):
+    recent=sidebar_data()
     form=SearchForm()
-    if law_type=='ALL':
-        laws=Law.objects.order_by("-time").all()
-    else:
-        laws=Law.objects(LawType=law_type).order_by("-time").all()
-    return render_template(
-        'index.html',
-        title='主页',
-        laws=laws,
-        year=datetime.now().year,
-        form=form)
+    laws=Law.objects(LawType=type).all()
+    return render_template('listlaw.html',form=form,type=type,laws=laws,recent=recent)
+
+@app.route('/searchLaw',methods=['GET', 'POST'])
+def searchLaw():
+    form=SearchForm()
+    recent=sidebar_data()
+    if form.validate_on_submit():
+        searchdata=form.content.data
+        if form.searchtype.data=='LawTitle':
+            laws=Law.objects(LawTitle__in__contains=searchdata).order_by("-time").all()
+        elif form.searchtype.data=='LawFileNo':
+            laws=Law.objects(LawFileNo__in__contains=searchdata).order_by("-time").all()
+        elif form.searchtype.data=='LawContent':
+            laws=Law.objects(LawContent__in__contains=searchdata).order_by("-time").all()
+        return render_template('listlaw.html',form=form,type=searchdata,laws=laws,recent=recent)
+
+    return redirect(url_for('listlaw',type=form.content.data))
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
-    form=LoginForm()
-    if form.validate_on_submit():
-        user=User.objects(username=form.username.data).first()
+    loginform=LoginForm()
+    form=SearchForm()
+    if loginform.validate_on_submit():
+        user=User.objects(username=loginform.username.data).first()
         if user is not None:
-            session['username']=form.username.data
-            session['password']=form.password.data
-            session['remember']=form.remember.data            
+            session['username']=loginform.username.data
+            session['password']=loginform.password.data
+            session['remember']=loginform.remember.data            
             flash('登录成功.',category="success")
-            return redirect(url_for('home'))
-    form.password.data=""
-    form.username.data=""
+            return redirect(url_for('default'))
+    loginform.password.data=""
+    loginform.username.data=""
     return render_template(
         'login.html',
+        loginform=loginform,
         form=form,
         year=datetime.now().year,
         title='用户登录'
@@ -81,20 +81,22 @@ def logout():
             session.pop('username',None)
             session.pop('passowrd',None)
             
-        return redirect(url_for('home'))
+        return redirect(url_for('default'))
+
 @app.route('/register',methods=['GET', 'POST'])
 def register():
-    form=RegisterForm()
-    if form.validate_on_submit():        
+    form=SearchForm()
+    Registerform=RegisterForm()
+    if Registerform.validate_on_submit():        
         new_user=User()
 
         file=request.files['user_head_image']
         extention=str(file.filename).split('.')[1]
-        p=app.static_folder+'/image/userface/'+form.username.data+'.'+extention
+        p=app.static_folder+'/image/userface/'+Registerform.username.data+'.'+extention
 
-        new_user.username=form.username.data
-        new_user.password=form.password.data
-        new_user.user_head=form.username.data+'.'+extention
+        new_user.username=Registerform.username.data
+        new_user.password=Registerform.password.data
+        new_user.user_head=Registerform.username.data+'.'+extention
         
         print(p)
         file.save(p)
@@ -102,11 +104,12 @@ def register():
 
         flash('注册成功，请登录.',category="success")
         return redirect(url_for('.login'))
-    form.username.data=""
-    form.password.data=""
-    form.confirm.data=""
+    Registerform.username.data=""
+    Registerform.password.data=""
+    Registerform.confirm.data=""
     return render_template(
         'register.html',
+        Registerform=Registerform,
         form=form
         )
 
@@ -118,16 +121,10 @@ def edit(law_id):
         return redirect(url_for('login'))
     form=newLawForm()
     law=Law.objects(id=law_id).first()
-    form.LawTitle.data=law.LawTitle
-    form.LawFileNo.data=law.LawFileNo
-    form.LawType.data=law.LawType
-    form.LawPublishDate.data=law.LawPublishDate
-    form.LawContent.data=law.LawContent
-    form.LawMark.data=law.LawMark
     ss=""
     for s in law.LawTags:
         ss=ss+" "+s
-    form.LawTags.data=ss
+    
     if form.validate_on_submit():
         fromcomment=CommentForm()
         law_tags=form.LawTags.data
@@ -141,24 +138,16 @@ def edit(law_id):
             LawMark=form.LawMark.data,
             LawTags=taglist
             )
-        print("AAAUPDATE"+str(result))
-        lawupdate=Law.objects(id=law_id).first()
-        comments=lawupdate.Lawcomments
-        tags=lawupdate.LawTags
-        return render_template(
-        'detail.html',
-        law=lawupdate,
-        form=fromcomment,
-        comments=comments,
-        tags=tags,
-        title='法规详细信息',
-        year=datetime.now().year
-        )
+        if result==1:
+            flash('修改成功')
+            print("AAAUPDATE"+str(result))
+            return redirect(url_for('detail',law_id=law_id))
         
     return render_template(
         'edit.html',
         form=form,
         law=law,
+        tags=ss,
         year=datetime.now().year,
         title='修改法规'
         )
@@ -167,18 +156,19 @@ def edit(law_id):
 
 @app.route('/detail/<string:law_id>',methods=['GET', 'POST'])
 def detail(law_id):
-    form=CommentForm()
-    if form.validate_on_submit():
+    form=SearchForm()
+    commentform=CommentForm()
+    if commentform.validate_on_submit():
         update_law=Law.objects(id=law_id).first()
         new_comment=Comment()
-        new_comment.name=form.name.data
-        new_comment.text=form.text.data
+        new_comment.name=commentform.name.data
+        new_comment.text=commentform.text.data
         new_comment.date=datetime.now()
         update_law.Lawcomments.append(new_comment)
         update_law.save()
         return redirect(url_for('detail',law_id=law_id))
-    form.name.data=""
-    form.text.data=""
+    commentform.name.data=""
+    commentform.text.data=""
     law=Law.objects(id=law_id).first()
     tags=law.LawTags
     comments=law.Lawcomments
@@ -188,6 +178,7 @@ def detail(law_id):
         'detail.html',
         law=law,
         form=form,
+        commentform=commentform,
         comments=comments,
         tags=tags,
         title='法规详细信息',
@@ -199,25 +190,27 @@ def new():
     if  not g.current_user:
         flash('需要登录才能新增法规',category="danger")
         return redirect(url_for('login'))
-    form=newLawForm()
-    if form.validate_on_submit():
-        law_tags=form.LawTags.data
+    form=SearchForm()
+    newform=newLawForm()
+    if newform.validate_on_submit():
+        law_tags=newform.LawTags.data
         taglist=law_tags.split()
         newlaw=Law()
-        newlaw.LawTitle=form.LawTitle.data
-        newlaw.LawFileNo=form.LawFileNo.data
-        newlaw.LawType=form.LawType.data
-        newlaw.LawPublishDate=form.LawPublishDate.data
-        newlaw.LawMark=form.LawMark.data
-        newlaw.LawContent=form.LawContent.data
+        newlaw.LawTitle=newform.LawTitle.data
+        newlaw.LawFileNo=newform.LawFileNo.data
+        newlaw.LawType=newform.LawType.data
+        newlaw.LawPublishDate=newform.LawPublishDate.data
+        newlaw.LawMark=newform.LawMark.data
+        newlaw.LawContent=newform.LawContent.data
         newlaw.LawTags=taglist
         newlaw.time=datetime.now()
         newlaw.user=g.current_user
         newlaw.save()
         flash('新增成功')
-        return redirect(url_for('home'))
+        return redirect(url_for('default'))
     return render_template(
         'new.html',
+        newform=newform,
         form=form,
         year=datetime.now().year,
         title='新增法律法规'
@@ -226,10 +219,12 @@ def new():
 @app.route('/contact')
 def contact():
     """Renders the contact page."""
+    form=SearchForm()
     return render_template(
         'contact.html',
         title='联系我们',
         year=datetime.now().year,
+        form=form,
         message='您可以通过以下方式联系到我们.'
     )
 
@@ -282,3 +277,36 @@ def ckupload():
       response = make_response(res)
       response.headers["Content-Type"] = "text/html"
       return response
+def sidebar_data():
+    recent=Law.objects.order_by("-publish_date").limit(5).all()
+    return recent
+#@app.route('/home')
+#def home():
+#    """Renders the home page."""
+#    form=SearchForm()
+#    if form.validate_on_submit():
+#        keywords=form.content.data
+#        #result=search.whoosh_search(Law,query=keyword,fields=['LawContent'],limit=20)
+#        #return result
+#    laws=Law.objects.order_by("-time").all()
+#    return render_template(
+#        'index.html',
+#        title='主页',
+#        laws=laws,
+#        year=datetime.now().year,
+#        form=form
+#    )
+
+#@app.route('/type/<string:law_type>')
+#def type(law_type='ALL'):
+#    form=SearchForm()
+#    if law_type=='ALL':
+#        laws=Law.objects.order_by("-time").all()
+#    else:
+#        laws=Law.objects(LawType=law_type).order_by("-time").all()
+#    return render_template(
+#        'index.html',
+#        title='主页',
+#        laws=laws,
+#        year=datetime.now().year,
+#        form=form)

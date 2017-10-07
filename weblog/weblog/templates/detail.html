@@ -1,4 +1,4 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -6,7 +6,7 @@
             <div class="list-group">
                 <div class="list-group-item">
                     <div class="list-group-item-heading" style="align-content:center">
-                        <h3><p style="text-align:center"> <a href="{{url_for('edit',law_id=law.id)}}"> {{law.LawTitle}}</a></p></h3>
+                        <h3><p style="text-align:center"> <a href=""> {{law.LawTitle}}</a></p></h3>
                         <h4>
                             <p style="text-align:center">
                                 文号：&nbsp;&nbsp;{{law.LawFileNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -65,25 +65,25 @@
             <div class="col-lg-12"><h4>发表评论</h4></div>
             <div class="list-group">
                 <form method="post" action="{{url_for('detail',law_id=law.id)}}">
-                    {{form.hidden_tag()}}
+                    {{commentform.hidden_tag()}}
                     <div class="list-group-item">
                         <div class="list-group-item-text">
                             <h5>标题</h5>
-                            {% if form.name.errors %}
-                            {% for e in form.name.errors%}
+                            {% if commentform.name.errors %}
+                            {% for e in commentform.name.errors%}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{form.name(class_='form-control')}}
+                            {{commentform.name(class_='form-control')}}
                         </div>
                         <div class="list-group-item-text">
                             <h5>内容</h5>
-                            {% if form.text.errors %}
-                            {% for e in form.text.errors %}
+                            {% if commentform.text.errors %}
+                            {% for e in commentform.text.errors %}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{ form.text(class_='form-control')}}
+                            {{ commentform.text(class_='form-control')}}
                         </div>
                         <p>
                             <div class="list-group-item-text">

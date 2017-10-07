@@ -1,53 +1,50 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 {% block title %}用户注册{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
-        <div class="col-lg-2">
-            <div class="list-group">
-            </div>
-        </div>
-        <div class="col-lg-8">
+        
+        <div class="col-lg-12">
             <h4>用户注册</h4>
             <div class="list-group">
                 <form method="post" action="{{url_for('.register')}}" enctype="multipart/form-data">
-                    {{form.hidden_tag()}}
+                    {{Registerform.hidden_tag()}}
                     <div class="list-group-item">
                         <div class="list-group-item-text">
                             <h5>用户名:</h5>
-                            {% if form.username.errors %}
-                            {% for e in form.username.errors%}
+                            {% if Registerform.username.errors %}
+                            {% for e in Registerform.username.errors%}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{form.username(class_='form-control')}}
+                            {{Registerform.username(class_='form-control')}}
                         </div>
                         <div class="list-group-item-text">
                             <h5>头像:</h5>
-                            {% if form.user_head_image.errors %}
-                            {% for e in form.user_head_image.errors%}
+                            {% if Registerform.user_head_image.errors %}
+                            {% for e in Registerform.user_head_image.errors%}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{form.user_head_image(class_='form-control')}}
+                            {{Registerform.user_head_image(class_='form-control')}}
                         </div>
                         <div class="list-group-item-text">
                             <h5>密  码：</h5>
-                            {% if form.password.errors %}
-                            {% for e in form.password.errors %}
+                            {% if Registerform.password.errors %}
+                            {% for e in Registerform.password.errors %}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{ form.password(class_='form-control')}}
+                            {{ Registerform.password(class_='form-control')}}
                         </div>
                         <div class="list-group-item-text">
                             <h5>确认密码:</h5>
-                            {% if form.confirm.errors %}
-                            {% for e in form.confirm.errors %}
+                            {% if Registerform.confirm.errors %}
+                            {% for e in Registerform.confirm.errors %}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{ form.confirm(class_='form-control')}}
+                            {{ Registerform.confirm(class_='form-control')}}
                         </div>
                         <p>
                             <div class="list-group-item-text">
@@ -59,12 +56,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-lg-2">
-            <div class="list-group">
-
-
-            </div>
-        </div>
+        
     </div>
 </div>
 {% endblock %}
