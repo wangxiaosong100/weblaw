@@ -1,23 +1,30 @@
 ﻿{% extends "base.html" %}
 {% block content %}
-<div class="row">
+<div class="col-lg-12">
+    <div class="jumbotron">
 
-    <div class="col-lg-12">
-        <div class="list-group">
-            <div class="list-group-item">
-                <div class="list-group-item-text" style="text-align:center">
+        <div class="col-lg-12">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="list-group-item-text" style="text-align:center">
 
-                    <img src="../static/image/404.jpg" style="text-align:center"/>
-                </div>
-                <div class="list-group-item-text" style="text-align:center">
-                    <h3>服务器未找到你所请求的页面</h3>
-                </div>
-                <div class="list-group-item-text" style="text-align:center">
-                    <a href="{{url_for('default')}}">返回主页</a>
+                        <img src="../static/image/icon/404.jpg" style="text-align:center"  height="300"/>
+                    </div>
+                    <div class="list-group-item-text" style="text-align:center">
+                        <ul><h4>
+                                服务器未找到您所请求的页面<br/>
+                                您有可能输入的错误的网址或网页被删除<br/>
+                                您可以点击这里<i><a href="{{url_for('default')}}">返回主页</a></i><br/>
+                            </h4>
+                        </ul>
+                    </div>
+                    <div class="list-group-item-text" style="text-align:center">
+                        
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 {% endblock %}

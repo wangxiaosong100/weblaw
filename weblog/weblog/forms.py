@@ -18,13 +18,17 @@ from wtforms.validators import DataRequired,Length,EqualTo,URL
 class SearchForm(Form):
     content=StringField(
         'content',
-        [DataRequired(),Length(max=255)]
+        [DataRequired()]
         )
     searchtype=SelectField('搜索类型',choices=[
         ('LawTitle','标题'),
         ('LawFileNo','文号'),
         ('LawContent','内容')
         ])
+    #def validate(self):
+    #    if  self.content.data=="":
+    #        self.content.errors.append("请输入要搜索的值后再点‘搜一下’，谢谢！")
+    #        return False
 
 class CommentForm(Form):
       name=StringField(

@@ -492,12 +492,12 @@
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="weblog\static\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="weblog\static\image\404.jpg" />
-    <Content Include="weblog\static\image\anomose.jpg" />
-    <Content Include="weblog\static\image\data.jpg" />
-    <Content Include="weblog\static\image\datadownload.jpg" />
-    <Content Include="weblog\static\image\datasearch.jpg" />
-    <Content Include="weblog\static\image\dataupload.jpg" />
+    <Content Include="weblog\static\image\icon\404.jpg" />
+    <Content Include="weblog\static\image\icon\addnew.jpg" />
+    <Content Include="weblog\static\image\icon\background.jpg" />
+    <Content Include="weblog\static\image\icon\login.jpg" />
+    <Content Include="weblog\static\image\icon\logo.jpg" />
+    <Content Include="weblog\static\image\icon\new.jpg" />
     <Content Include="weblog\static\image\icon\qy.jpg" />
     <Content Include="weblog\static\image\icon\dn.jpg" />
     <Content Include="weblog\static\image\icon\sj.jpg" />
@@ -505,6 +505,7 @@
     <Content Include="weblog\static\image\icon\zh.jpg" />
     <Content Include="weblog\static\image\icon\cz.jpg" />
     <Content Include="weblog\static\image\icon\jr.jpg" />
+    <Content Include="weblog\static\image\userface\anomose.jpg" />
     <Content Include="weblog\static\image\userface\wangxs.jpg" />
     <Content Include="weblog\static\scripts\bootstrap.js" />
     <Content Include="weblog\static\scripts\bootstrap.min.js" />
@@ -525,6 +526,7 @@
     <Content Include="weblog\templates\base.html" />
     <Content Include="weblog\templates\default.html" />
     <Content Include="weblog\templates\detail.html" />
+    <Content Include="weblog\templates\search.html" />
     <Content Include="weblog\templates\listlaw.html" />
     <Content Include="weblog\templates\login.html" />
     <Content Include="weblog\templates\edit.html" />

@@ -19,21 +19,22 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <label class="btn-toolbar"><img src="../static/image/logo.jpg" width="80" height="80" class="img-circle" /></label>
+                <label class="btn-toolbar"><img src="../static/image/icon/logo.jpg" width="64" height="64" class="img-circle" /></label>
                 <label class="btn-toolbar">&nbsp;</label>
             </div>
             <div class="navbar-header">
-                <h1><a href="/" class="navbar-brand">审计法规库</a></h1> 
+                <h5><a href="/" class="navbar-brand">审计法规库</a></h5>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><img src="{% if g.current_user %}
+                    <li>
+                        <img src="{% if g.current_user %}
                              ../static/image/userface/{{g.current_user.user_head}}
                           {% else %}
-                            ../static/image/anomose.jpg
+                            ../static/image/userface/anomose.jpg
                           {% endif %}
                          "
-                           class="img-circle" width="80" height="80" />
+                             class="img-circle" width="64" height="64" />
                         <font color="blue">
                             {% if g.current_user %}
                             {{g.current_user.username}}
@@ -41,17 +42,17 @@
                             游客
                             {% endif %}
                         </font>
-                        
+
                     </li>
-                    <li><a href="{{url_for('login')}}"><h4>登录</h4></a></li>
-                    <li><a href="{{url_for('register')}}"><h4>注册</h4></a></li>
+                    <li><a href="{{url_for('login')}}"><h5>登录</h5></a></li>
+                    <li><a href="{{url_for('register')}}"><h5>注册</h5></a></li>
                     {% if g.current_user %}
-                    <li><a href="{{url_for('logout')}}"><h4>退出</h4></a></li>
+                    <li><a href="{{url_for('logout')}}"><h5>退出</h5></a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
-        
+
     </div>
     {% with messages=get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -65,13 +66,13 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
+
     <div class="container body-content">
         <div class="col-lg-12">
             <div class="jumbotron">
                 <div class="row">
                     <div class="list-group-item-text" style="text-align:center">
-                        <form method="post" action="{{url_for('searchLaw')}}">
+                        <form method="post" action="{{url_for('searchLaw',page=1)}}">
                             {% if form.content.errors %}
                             {% for e in form.content.errors %}
                             <p class="help-block"><font color="red">{{e}}</font></p>
@@ -86,15 +87,15 @@
                             {{form.searchtype(_class='form-control')}}
                             <input type="submit" class="btn-primary" value="搜一下" />
                         </form>
-                           
-                        
+
+
                         <div class="col-lg-1">
-                            
+
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-     </div>
         {% block content %}{% endblock %}
         <hr />
         <footer>
