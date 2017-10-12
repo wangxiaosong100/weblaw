@@ -2,6 +2,7 @@
 from flask import Flask
 from config import DevConfig
 from weblog.MongoDB_Models import mongo
+
 #from flask_msearch import Search
 #from jieba.analyse import ChineseAnalyzer
 

@@ -8,14 +8,12 @@
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap-datetimepicker.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
-    <link href="../static/bootstrap-treeview-1.2.0/src/css/bootstrap-treeview.css" rel="stylesheet" />
-    <script src="../static/bootstrap-treeview-1.2.0/src/js/bootstrap-treeview.js"></script>
     <script src="../static/ckeditor/ckeditor.js"></script>
     <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
 </head>
 
-<body>
+<body style="background-image: url(../static/image/icon/background1.jpg); ">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -87,11 +85,6 @@
                             {{form.searchtype(_class='form-control')}}
                             <input type="submit" class="btn-primary" value="搜一下" />
                         </form>
-
-
-                        <div class="col-lg-1">
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -99,7 +92,8 @@
         {% block content %}{% endblock %}
         <hr />
         <footer>
-            <p>&copy; {{ year }} - 审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}">联系我们</a></p>
+            <p>&copy; {{ year }} - 云南省审计厅●审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}">联系我们</a></p>
+            Powered by<img src="../static/image/icon/python.jpg" height="32" width="126"/>
         </footer>
     </div>
 

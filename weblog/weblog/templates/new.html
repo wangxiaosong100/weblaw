@@ -26,6 +26,16 @@
                         {{newform.LawFileNo(class_='form-control')}}
                     </div>
                     <div class="list-group-item-text">
+                        <h5>发布部门：</h5>
+                        {% if newform.LawDepartment.errors %}
+                        {% for e in newform.LawDepartment.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{newform.LawDepartment(class_='form-control')}}
+                    </div>
+                    
+                    <div class="list-group-item-text">
                         <h5>法规分类</h5>
                         {% if newform.LawType.errors %}
                         {% for e in newform.LawType.errors %}
@@ -33,6 +43,16 @@
                         {% endfor %}
                         {% endif %}
                         {{ newform.LawType(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>二级分类</h5>
+                        {% if newform.LawTypeDetail.errors %}
+                        {% for e in newform.LawTypeDetail.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ newform.LawTypeDetail(class_='form-control')}}
+                        <div id="m" class="hidden"></div>
                     </div>
                     <div class="list-group-item-text">
                         <h5>发规发布/生效日期：</h5>
@@ -102,5 +122,29 @@
         }
     }
 </script>
+<script>
+    $(function () {
+        $("#LawType").change(function () {
+            parentId = $(this).val();
+            url = "{{url_for('set_lawdetail',parentId=0)}}".replace("/0", "/" + parentId)
+            $.get(url, function (result) {
+                $("#m").html(result);
+                var obj1 = document.getElementsByName('LawTypeDetail1');
+                var LawTypeDetail = document.getElementsByName('LawTypeDetail');
+                for (var i = LawTypeDetail.item(0).childNodes.length; i >= 0; i--) {
+                    var n = LawTypeDetail.item(0).childNodes[i];
+                    if (n != null) {
+                        LawTypeDetail.item(0).removeChild(n);
+                    }
+                }
+                var j = obj1.item(0).childNodes.length;
+                for (var i = j - 1; i >= 0; i--) {
+                    LawTypeDetail.item(0).appendChild(obj1.item(0).childNodes[i]);
+                }
+            })
 
+        })
+    }
+)
+</script>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% block title %}用户注册{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-12" >
         
         <div class="col-lg-12" style="background-image: url(../static/image/icon/login.jpg)">
 
@@ -12,6 +12,25 @@
                 <form method="post" action="{{url_for('.register')}}" enctype="multipart/form-data" style="background-image: url(../static/image/icon/background.jpg)">
                     {{Registerform.hidden_tag()}}
                     <div class="list-group-item">
+                        <div class="list-group-item-text">
+                            <h5>州市名:</h5>
+                            {% if Registerform.city.errors %}
+                            {% for e in Registerform.city.errors%}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{Registerform.city(class_='form-control')}}
+                        </div>
+                        <div class="list-group-item-text">
+                            <h5>区县名:</h5>
+                            {% if Registerform.county.errors %}
+                            {% for e in Registerform.county.errors%}
+                            <p class="help-block"><font color="red">{{e}}</font></p>
+                            {% endfor %}
+                            {% endif %}
+                            {{Registerform.county(class_='form-control')}}
+                            <div id="m" class="hidden"></div>
+                        </div>
                         <div class="list-group-item-text">
                             <h5>用户名:</h5>
                             {% if Registerform.username.errors %}
@@ -61,4 +80,32 @@
         
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(function () {
+        $("#city").change(function () {
+            citycode = $(this).val();
+            url = "{{url_for('set_county',citycode=0)}}".replace("/0", "/" + citycode)
+            $.get(url, function (result) {
+                $("#m").html(result);
+                var obj1 = document.getElementsByName('county1');
+                var county = document.getElementsByName('county');
+                for (var i = county.item(0).childNodes.length; i >=0; i--) {
+                    var n = county.item(0).childNodes[i];
+                    if (n != null) {                       
+                        county.item(0).removeChild(n);
+                    }
+                }                
+                var j = obj1.item(0).childNodes.length;
+                for (var i = j-1;i>=0; i--) {
+                    
+                    county.item(0).appendChild(obj1.item(0).childNodes[i]);
+                }                      
+            })
+            
+        })
+    }
+)
+</script>
 {% endblock %}

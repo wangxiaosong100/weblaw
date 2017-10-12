@@ -58,12 +58,12 @@
                         {% if g.current_user %}
                         
                             <a href="{{url_for('new')}}">
-                                <img src="../static/image/icon/addnew.jpg" class="img-circle" width="40" height="40" />我来贡献<br />
+                                <img src="../static/image/icon/addnew.jpg" class="img-rounded" width="40" height="40" />我来贡献<br />
                             </a>
                        
                         {% endif %}
 
-                        <img src="../static/image/icon/new.jpg" class="img-circle" width="40" height="40" />最新更新
+                        <img src="../static/image/icon/new.jpg" class="img-rounded" width="40" height="40" />最新更新
                         {% if recent %}
                         {% for rlaw in recent %}
                         <ul>

@@ -1,8 +1,8 @@
 ﻿#-*- coding:utf-8-*-
 from flask import flash
 from flask_wtf import Form
-#from AppFiles.models import User,Post,Comment,tags,Tag
-from weblog.MongoDB_Models import mongo,Post,User,Comment,BlogPost,VideoPost,ImagePost,QuotePost
+from weblog.MongoDB_Models import mongo,User,Comment,Law,Department
+from weblog.MongoDB_Models import LawType as MYLawType
 from wtforms import (
     StringField,
     TextAreaField,
@@ -14,6 +14,7 @@ from wtforms import (
     DateTimeField
     )
 from wtforms.validators import DataRequired,Length,EqualTo,URL
+
 
 class SearchForm(Form):
     content=StringField(
@@ -64,11 +65,23 @@ class LoginForm(Form):
                 )
             return False
         return True
+
 class RegisterForm(Form):
     username=StringField('Username',[
         DataRequired(),
         Length(max=255)
         ])
+    city=SelectField('州市',choices=[
+        (dep.departmentCode,dep.departmentname)
+        for dep in Department.objects(parentCode='YN530000').all()
+        ])
+    
+    county=SelectField('县区',choices=[])
+    county1=SelectField('县区',choices=[])
+    #,choices=[
+    #    (dep.departmentCode,dep.departmentname)
+    #    for dep in Department.objects(parentCode__ne='').all()
+    #    ]
     password=PasswordField('Password',[
         DataRequired(),
         Length(min=8)
@@ -78,12 +91,14 @@ class RegisterForm(Form):
         EqualTo('password')
         ])
     user_head_image=FileField('请选择头像文件')
+    
+    
     #recaptcha=RecaptchaField()
     def validate(self):
-        check_validate=super(RegisterForm,self).validate()
+        #check_validate=super(RegisterForm,self).validate()
 
-        if not check_validate:
-            return False
+        #if not check_validate:
+        #    return False
         user=User.objects(
             username=self.username.data
             ).first()
@@ -97,45 +112,48 @@ class RegisterForm(Form):
         #    return False
         return True
 
+
+
 class newLawForm(Form):
     LawTitle=StringField('法规标题',[
         DataRequired()
         ])
+    LawDepartment=StringField('发布部门')
     LawFileNo=StringField('法规文号',[
         DataRequired(),
         Length(max=255)
         ])
     LawType=SelectField('法规分类',choices=[
-        ('综合','综合'),
-        ('审计','审计'),
-        ('财政财务','财政财务'),
-        ('税收','税收'),
-        ('金融','金融'),
-        ('企业','企业'),
-        ('党内规章制度','党内规章制度')
+        (str(type.id),type.LawTypName)
+        for type in MYLawType.objects(parentId='').all()
         ])
+    LawTypeDetail=SelectField('分类明细',choices=[])
+    LawTypeDetail1=SelectField('分类明细',choices=[])
     LawPublishDate=DateField('发布日期',[DataRequired()])
     LawMark=StringField('备注')
     LawContent=TextAreaField('法规正文',[DataRequired()])
     LawTags=StringField('标签')
 
-class PostForm(Form):
-    title=StringField('Title',[
-        DataRequired(),
-        Length(max=255)
-        ])
-    type=SelectField('Post Type',choices=[
-        ('Blog','文字'),
-        ('VideoBlog','视频'),
-        ('ImageBlog','图片'),
-        ('QuoteBlog','Quto')
-        ])
+    def validate(self):
+        return True
 
-    text=TextAreaField('内容')
-    image=StringField('图片URL',[Length(max=500)])
-    video=StringField('视频URL',[Length(max=500)])
-    author=StringField('作者',[Length(max=500)])
-    tag=StringField('Tags')
+#class PostForm(Form):
+#    title=StringField('Title',[
+#        DataRequired(),
+#        Length(max=255)
+#        ])
+#    type=SelectField('Post Type',choices=[
+#        ('Blog','文字'),
+#        ('VideoBlog','视频'),
+#        ('ImageBlog','图片'),
+#        ('QuoteBlog','Quto')
+#        ])
 
-class OpenIDForm(Form):
-    openid=StringField('OpenID URL',[DataRequired()],URL)
+#    text=TextAreaField('内容')
+#    image=StringField('图片URL',[Length(max=500)])
+#    video=StringField('视频URL',[Length(max=500)])
+#    author=StringField('作者',[Length(max=500)])
+#    tag=StringField('Tags')
+
+#class OpenIDForm(Form):
+#    openid=StringField('OpenID URL',[DataRequired()],URL)

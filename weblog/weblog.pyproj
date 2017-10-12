@@ -20,6 +20,7 @@
     <RootNamespace>weblog</RootNamespace>
     <InterpreterId>{0774fc90-07b1-4760-8694-b196b19f2da0}</InterpreterId>
     <InterpreterVersion>3.5</InterpreterVersion>
+    <NameOfLastUsedPublishProfile>weblogconfig</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +34,9 @@
     <Compile Include="config.py" />
     <Compile Include="runserver.py" />
     <Compile Include="weblog\forms.py" />
+    <Compile Include="weblog\getchoices.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="weblog\MongoDB_Models.py" />
     <Compile Include="weblog\__init__.py" />
     <Compile Include="weblog\views.py" />
@@ -129,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <None Include="weblogconfig.pubxml" />
     <Content Include="weblog\static\bootstrap-treeview-1.2.0\.bowerrc" />
     <Content Include="weblog\static\bootstrap-treeview-1.2.0\.gitattributes" />
     <Content Include="weblog\static\bootstrap-treeview-1.2.0\.gitignore" />
@@ -498,6 +503,7 @@
     <Content Include="weblog\static\image\icon\login.jpg" />
     <Content Include="weblog\static\image\icon\logo.jpg" />
     <Content Include="weblog\static\image\icon\new.jpg" />
+    <Content Include="weblog\static\image\icon\python.jpg" />
     <Content Include="weblog\static\image\icon\qy.jpg" />
     <Content Include="weblog\static\image\icon\dn.jpg" />
     <Content Include="weblog\static\image\icon\sj.jpg" />

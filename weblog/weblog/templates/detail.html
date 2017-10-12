@@ -6,19 +6,27 @@
             <div class="list-group">
                 <div class="list-group-item">
                     <div class="list-group-item-heading" style="align-content:center">
-                        <h3><p style="text-align:center"> <a href=""> {{law.LawTitle}}</a></p></h3>
-                        <h4>
-                            <p style="text-align:center">
-                                文号：&nbsp;&nbsp;{{law.LawFileNo}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                分类：{{law.LawType}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                关键词:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                {% for tag in tags %}
-                                <a href="" class="label-warning">{{tag | safe }} &nbsp;&nbsp;</a>
-                                {% endfor %}
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                备注:&nbsp;&nbsp;{{law.LawMark}}
+                        <h4><p style="text-align:center"> {{law.LawTitle}} </p></h4>
+
+                        <h5>
+                            <p style="text-align:right">
+                                <li>文号：{{law.LawFileNo}}</li>
+                                <li>分类：<a href="{{url_for('listlaw',page=1,type=parentType.LawTypName)}}">{{parentType.LawTypName}}</a>>>{{law.LawType.LawTypName}}</li>
+                                <li>
+                                    关键词:
+                                    {% for tag in tags %}
+                                    {{tag | safe }} </a>
+                                    {% endfor %}
+                                </li>
+                                <li>
+                                    备注:{{law.LawMark}}
+                                </li>
+                                <li>法规贡献人：{{law.user.department.departmentname}}>>{{law.user.username}}</li>
                             </p>
-                        </h4>
+                        </h5>
+                        </span>
+                        </p>
+                        <h4></h4>
                     </div>
                     <div class="list-group-item-text">
                         <pre id="" class="pre-scrollable">  
