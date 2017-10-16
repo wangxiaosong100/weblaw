@@ -38,6 +38,7 @@ class User(mongo.Document):
 class LawType(mongo.Document):
     LawTypName=mongo.StringField(required=True)
     parentId=mongo.StringField()
+    typeimage=mongo.StringField()#法规显示的图标
     def __repr__(self):
           return "<LawType '{}'>".format(self.LawTypName)
 

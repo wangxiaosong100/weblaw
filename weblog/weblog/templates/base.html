@@ -8,6 +8,12 @@
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap-datetimepicker.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <link href="../static/jquery-treeview/jquery.treeview.css" rel="stylesheet" />
+    <link href="../static/jquery-treeview/demo/screen.css" rel="stylesheet" />
+    <script src="../static/jquery-treeview/demo/jquery-3.2.1.min.js"></script>
+    <script src="../static/jquery-treeview/jquery.treeview.js"></script>
+    <script src="../static/jquery-treeview/demo/jquery.cookie.js"></script>
+    <script src="../static/jquery-treeview/jquery.treeview.js"></script>
     <script src="../static/ckeditor/ckeditor.js"></script>
     <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
@@ -27,7 +33,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <img src="{% if g.current_user %}
-                             ../static/image/userface/{{g.current_user.user_head}}
+                             ../static/image/userface/{% if g.current_user.user_head=='' %}anomose.jpg{% else %}{{g.current_user.user_head}}{% endif %}
                           {% else %}
                             ../static/image/userface/anomose.jpg
                           {% endif %}
@@ -42,8 +48,8 @@
                         </font>
 
                     </li>
-                    <li><a href="{{url_for('login')}}"><h5>登录</h5></a></li>
-                    <li><a href="{{url_for('register')}}"><h5>注册</h5></a></li>
+                    <li><a href="{{url_for('login')}}" target="_blank"><h5>登录</h5></a></li>
+                    <li><a href="{{url_for('register')}}" target="_blank"><h5>注册</h5></a></li>
                     {% if g.current_user %}
                     <li><a href="{{url_for('logout')}}"><h5>退出</h5></a></li>
                     {% endif %}
@@ -69,6 +75,7 @@
         <div class="col-lg-12">
             <div class="jumbotron">
                 <div class="row">
+                    <br />
                     <div class="list-group-item-text" style="text-align:center">
                         <form method="post" action="{{url_for('searchLaw',page=1)}}">
                             {% if form.content.errors %}
@@ -92,7 +99,7 @@
         {% block content %}{% endblock %}
         <hr />
         <footer>
-            <p>&copy; {{ year }} - 云南省审计厅●审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}">联系我们</a></p>
+            <p>&copy; {{ year }} - 云南省审计厅●审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}" target="_blank">联系我们</a></p>
             Powered by<img src="../static/image/icon/python.jpg" height="32" width="126"/>
         </footer>
     </div>

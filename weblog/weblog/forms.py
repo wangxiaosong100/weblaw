@@ -30,6 +30,22 @@ class SearchForm(Form):
     #    if  self.content.data=="":
     #        self.content.errors.append("请输入要搜索的值后再点‘搜一下’，谢谢！")
     #        return False
+class LawtypeForm(Form):
+    addType=SelectField('添加类型',choices=[
+        ('',''),
+        ('一级分类','一级分类'),
+        ('二级分类','二级分类'),
+        ('三级分类','三级分类')])
+    typename=StringField('类型名称',[DataRequired()])
+    parentName=SelectField('一级分类',choices=[
+        (str(lawtype.id),lawtype.LawTypName)
+        for lawtype in MYLawType.objects(parentId='').all()
+        ])
+    detailTypeName=SelectField('二级分类',choices=[])
+    detailTypeName1=SelectField('二级分类1',choices=[])
+    typeimage=FileField('类型图标',[DataRequired()])
+    def validate(self):
+        return True
 
 class CommentForm(Form):
       name=StringField(

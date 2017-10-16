@@ -2,63 +2,85 @@
 
 {% block content %}
 <div class="col-lg-12">    
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="col-lg-9">               
-                    <h4>{{type}}类：<i><a href="javascript:history.go(-1)">返回</a></i></h4>
-                          
-                        {% for lt in lawtypedetail %}
-                        <div class="list-group">
-                            <h5>{{lt.LawTypName}}>></h5>                               
-                                {% if laws.items %}
-                                    <div class="list-group-item">
-                                    {% for law in laws.items%}
-                                        {% if law.LawType==lt %}                                                
-                                            <div class="list-group-item-heading">                                                    
-                                                <h6>
-                                                    <li>
-                                                        <a href="{{url_for('detail',law_id=law.id)}}">{{law.LawTitle}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                        文号：&nbsp;&nbsp;{{law.LawFileNo}}&nbsp;&nbsp;&nbsp;&nbsp;                                                                
-                                                    </li>
-                                                </h6>                                                
-                                            </div>                                            
-                                        {% endif %}
-                                    {% endfor %}                                        
-                                    </div>                                   
-                                {% endif %}
-                        </div>
-                        {% endfor %}
+    <div class="list-group-item" style="background-color:#eee1e1;">
+        <div class=" row">
+        <div class="col-lg-4" style="text-align:left">
+            <ul class="filetree">
                 <h5>
-                    {% if laws.pages!=0 %}第&nbsp;
-                    {% for p in range(laws.pages) %}
-                    <a href="{{url_for('listlaw',page=p+1,type=type)}}">{{p+1}}&nbsp;</a>
-                    {% endfor %}
-                    页
-                    {% endif %}
+                    <li>
+                        <span class="folder"> {{lawtype.LawTypName}}</span>
+                        {% if lawtypedetail %}
+                        <ul>
+                            {% for lt in lawtypedetail %}
+                            <li>
+                                <span class="folder">
+                                    <a href="{{url_for('listlawFrame',page=1,type=lt.LawTypName)}}" target="listlaw">{{lt.LawTypName}}</a>
+                                </span>
+                                <ul>
+                                    {% for ls in lawtypedetailsub %}
+                                    {% if ls.parentId==lt.id|string %}
+                                    <li><span class="file"><a href="{{url_for('listlawFrame',page=1,type=lt.LawTypName)}}" target="listlaw"> {{ls.LawTypName}}</a></span></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
                 </h5>
-            </div>
-            <div class="col-lg-3">
-                <h6>
-                    {% if g.current_user %}
-                        <a href="{{url_for('new')}}">
-                            <img src="../static/image/icon/addnew.jpg" class="img-rounded" width="40" height="40" />我来贡献</a><br />
-                        
-                    {% endif %}
-                    <img src="../static/image/icon/new.jpg" class="img-rounded" width="40" height="40" />最新更新
-                    {% if recent %}
-                    {% for rlaw in recent %}
-                    <ul>
-                        <div class="list-group-item-heading">
-                            <li><a href="{{url_for('detail',law_id=rlaw.id)}}">{{rlaw.LawTitle}}</a></li>
-                        </div>
-                    </ul>
-                    {% endfor %}
-                    {% endif %}                      
-                </h6>   
-            </div>
-          </div>
-       </div>
-   </div>    
+            </ul>
+        </div>
+        <div class="col-lg-5" style="text-align:left">
+            <iframe id="listlawid" name="listlaw" frameborder="0" scrolling="yes" width="100%" style="margin-left:0;text-align:left" height="500px"></iframe>
+        </div>
+        <div class="col-lg-3">
+            <h6>
+                {% if g.current_user %}
+                <a href="{{url_for('new')}}" target="_blank">
+                    <img src="../static/image/icon/addnew.jpg" class="img-rounded" width="40" height="40" />我来贡献
+                </a><br />
+
+                {% endif %}
+                <img src="../static/image/icon/new.jpg" class="img-rounded" width="40" height="40" />最新更新
+                {% if recent %}
+                {% for rlaw in recent %}
+                <ul>
+                    <div class="list-group-item-heading">
+                        <li><a href="{{url_for('detail',law_id=rlaw.id,check='1')}}" target="_blank">{{rlaw.LawTitle}}</a></li>
+                    </div>
+                </ul>
+                {% endfor %}
+                {% endif %}
+            </h6>
+        </div>
+    </div>  
+    </div>    
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+   
+    $(function () {
+        $("#addType").change(function () {
+            type = $(this).val();
+            if (type == '一级分类') {
+                $("#p1").hide();
+                $("#p2").hide();
+                $("#p3").show();
+            }
+            else if (type == '二级分类') {
+                $("#p1").show();
+                $("#p2").hide();
+                $("#p3").hide();
+            }
+            else if (type == '三级分类') {
+                $("#p1").show();
+                $("#p2").show();
+                $("#p2").hide();
+            }
+        })
+    }
+        )
+</script>
 {% endblock %}

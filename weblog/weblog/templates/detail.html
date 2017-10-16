@@ -6,12 +6,14 @@
             <div class="list-group">
                 <div class="list-group-item">
                     <div class="list-group-item-heading" style="align-content:center">
-                        <h4><p style="text-align:center"> {{law.LawTitle}} </p></h4>
-
-                        <h5>
-                            <p style="text-align:right">
+                        <h2 style="font-family:SimHei"><p style="text-align:center"> {{law.LawTitle}} </p></h2>
+                        <h3 style="text-align:center;font-family:FangSong_GB2312">{{law.LawFileNo}}</h3>
+                        <hr style="height:5px;border:none;border-bottom:5px solid red;"/>
+                        <h4 style="font-family:YouYuan">
+                            <p>
                                 <li>文号：{{law.LawFileNo}}</li>
-                                <li>分类：<a href="{{url_for('listlaw',page=1,type=parentType.LawTypName)}}">{{parentType.LawTypName}}</a>>>{{law.LawType.LawTypName}}</li>
+                                <li>发布部门:{{law.LawPublishDepart}}</li>
+                                <li>分类：<a href="{{url_for('listlaw',page=1,type=parentType.LawTypName)}}" target="_blank">{{parentType.LawTypName}}</a>>>{{law.LawType.LawTypName}}</li>
                                 <li>
                                     关键词:
                                     {% for tag in tags %}
@@ -23,15 +25,16 @@
                                 </li>
                                 <li>法规贡献人：{{law.user.department.departmentname}}>>{{law.user.username}}</li>
                             </p>
-                        </h5>
+                        </h4>
                         </span>
                         </p>
                         <h4></h4>
                     </div>
-                    <div class="list-group-item-text">
-                        <pre id="" class="pre-scrollable">  
-                            {{law.LawContent|safe }}                       
-                        </pre>
+                    <div class="list-group-item-text" style="font-family:FangSong_GB2312">
+                        <pre  style="font-family: FangSong_GB2312">
+                            <h3 style="font-family: FangSong_GB2312">{{law.LawContent|safe }}   </h3> 
+                        </pre>               
+                        
                     </div>
                 </div>
             </div>
@@ -72,7 +75,7 @@
         <div class="col-lg-12">
             <div class="col-lg-12"><h4>发表评论</h4></div>
             <div class="list-group">
-                <form method="post" action="{{url_for('detail',law_id=law.id)}}">
+                <form method="post" action="{{url_for('detail',law_id=law.id,check='1')}}">
                     {{commentform.hidden_tag()}}
                     <div class="list-group-item">
                         <div class="list-group-item-text">

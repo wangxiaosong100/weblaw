@@ -41,7 +41,7 @@
                             {{Registerform.username(class_='form-control')}}
                         </div>
                         <div class="list-group-item-text">
-                            <h5>头像:</h5>
+                            <h5>头像:(若不选择，系统会显示一个默认图片)</h5>
                             {% if Registerform.user_head_image.errors %}
                             {% for e in Registerform.user_head_image.errors%}
                             <p class="help-block"><font color="red">{{e}}</font></p>

@@ -5,9 +5,9 @@ from flask import render_template,url_for,request,make_response,render_template_
 from flask import redirect,flash,session,g
 from weblog import app
 #from weblog.getchoices import registerform
-from weblog.forms import SearchForm,LoginForm,newLawForm,CommentForm,RegisterForm
+from weblog.forms import SearchForm,LoginForm,newLawForm,CommentForm,RegisterForm,LawtypeForm
 
-from weblog.MongoDB_Models import User,Law,Comment,Department,LawType
+from weblog.MongoDB_Models import User,Law,Comment,Department,LawType,available_roles
 import os,re,random
 from os import path,pardir
 
@@ -29,7 +29,23 @@ def page_not_found(error):
 @app.route('/default')
 def default():
     form=SearchForm()
-    return render_template('default.html',form=form,year=datetime.now().year)
+    types=LawType.objects(parentId='').all()
+    return render_template('default.html',form=form,year=datetime.now().year,title='主页',types=types)
+
+@app.route('/admin')
+def admin():
+    form=SearchForm()
+    if not g.current_user:
+        flash('请登录','danger')
+        return redirect(url_for('.login'))
+    if is_admin(g.current_user.username):
+        
+        laws=Law.objects(check='0').order_by("-time").all()
+        return render_template('admin.html',form=form,laws=laws,title='管理页面')
+    else:
+        return render_template('adminError.html',form=form,title='出错')
+
+
 
 
 @app.route('/listlaw/<int:page>,<string:type>',methods=['GET', 'POST'])
@@ -38,8 +54,24 @@ def listlaw(page,type):
     form=SearchForm()
     lawtype=LawType.objects(LawTypName=type).first()
     lawtypedetail=LawType.objects(parentId=str(lawtype.id)).all()
+    lawtypedetailsub=LawType.objects(parentId__in=(str(detail.id) for detail in lawtypedetail))
     laws=Law.objects(LawType__in=lawtypedetail,check='1').paginate(page,5)
-    return render_template('listlaw.html',form=form,type=type,laws=laws,recent=recent,lawtypedetail=lawtypedetail)
+    return render_template('listlaw.html',
+                           form=form,#搜索
+                           lawtype=lawtype,#父类
+                           laws=laws,
+                           recent=recent,#侧边栏数据
+                           lawtypedetail=lawtypedetail,#子类
+                           title='法规列表',
+                           lawtypedetailsub=lawtypedetailsub)#孙子类
+
+@app.route('/listlawFrame/<int:page>,<string:type>',methods=['GET', 'POST'])
+def listlawFrame(page,type):
+    recent=sidebar_data()
+    lawtypedetail=LawType.objects(LawTypName=type).first()
+    laws=Law.objects(LawType=lawtypedetail,check='1').paginate(page,5)
+    return render_template('listlawFrame.html',
+                           laws=laws,type=type)
 
 @app.route('/searchLaw/<int:page>',methods=['GET', 'POST'])
 def searchLaw(page=1):
@@ -128,28 +160,25 @@ def register():
         new_user=User()
         department=Department.objects(departmentCode=registerform.county.data).first()
         file=request.files['user_head_image']
-        extention=str(file.filename).split('.')[1]
-        p=app.static_folder+'/image/userface/'+registerform.username.data+'.'+extention
-
+        print(str(file.filename));
+        if file.filename=='':
+            new_user.user_head=''
+        else:
+            extention=str(file.filename).split('.')[1]
+            p=app.static_folder+'/image/userface/'+registerform.username.data+'.'+extention
+            new_user.user_head=registerform.username.data+'.'+extention
+            file.save(p)
         new_user.username=registerform.username.data
         new_user.password=registerform.password.data
-        new_user.department=department
-        new_user.user_head=registerform.username.data+'.'+extention
-        
-        file.save(p)
+        new_user.department=department        
+        new_user.roles=[available_roles[2]]       
         new_user.save()
-
         flash('注册成功，请登录.',category="success")
         return redirect(url_for('.login'))
     registerform.username.data=""
     registerform.password.data=""
     registerform.confirm.data=""
-    registerform.county.data=""
-    #print('AAAA')
-    #for c in Registerform.city.choices:
-    #    print(c)
-    #Registerform.county.choices=[(dep.departmentCode,dep.departmentname)
-    #    for dep in Department.objects(parentCode=Registerform.city.choices[0][0]).all()]
+    registerform.county.data=""   
     return render_template(
         'register.html',
         Registerform=registerform,
@@ -164,6 +193,7 @@ def set_county(citycode):
     registerform.county1.choices=[(dep.departmentCode,dep.departmentname)
         for dep in Department.objects(parentCode=citycode).all()]
     return render_template_string("{{registerform.county1(class_='form-control')}}",registerform=registerform)
+
 
 @app.route('/set_lawdetail/<string:parentId>')
 def set_lawdetail(parentId):
@@ -214,8 +244,8 @@ def edit(law_id):
 
 
 
-@app.route('/detail/<string:law_id>',methods=['GET', 'POST'])
-def detail(law_id):
+@app.route('/detail/<string:law_id>,<string:check>',methods=['GET', 'POST'])
+def detail(law_id,check):
     form=SearchForm()
     commentform=CommentForm()
     if commentform.validate_on_submit():
@@ -229,7 +259,7 @@ def detail(law_id):
         return redirect(url_for('detail',law_id=law_id))
     commentform.name.data=""
     commentform.text.data=""
-    law=Law.objects(id=law_id,check='1').first()
+    law=Law.objects(id=law_id,check=check).first()
     parentType=LawType.objects(id=law.LawType.parentId).first()
     tags=law.LawTags
     comments=law.Lawcomments
@@ -343,8 +373,64 @@ def ckupload():
       response.headers["Content-Type"] = "text/html"
       return response
 def sidebar_data():
-    recent=Law.objects(check='1').order_by("-publish_date").limit(5).all()
+    recent=Law.objects(check='1').order_by("-time").limit(5).all()
     return recent
+
+def is_admin(username):
+    u=User.objects(username=username).first()
+    if u.roles[0]=='admin':
+        return True
+    else:
+        return False
+@app.route('/checkLaw/<string:law_id>,<string:check>')
+def checkLaw(law_id,check):
+    law=Law.objects(id=law_id).first()
+    law.check=check
+    law.save()
+    flash('操作成功','message')
+    return redirect(url_for('admin'))
+
+@app.route('/lawtype',methods=['GET', 'POST'])
+def lawtype():
+    form=SearchForm()
+    lawtypeform=LawtypeForm()
+    ptypes=LawType.objects(parentId='').all()
+    types=LawType.objects(parentId__ne='').all()
+    if lawtypeform.validate_on_submit():
+        if lawtypeform.addType.data=='一级分类':
+            type=LawType()
+            #添加显示图片  
+            file=request.files['typeimage']          
+            if file.filename!="":                
+                extention=str(file.filename).split('.')[1]#取扩展名
+                p=app.static_folder+'/image/icon/'+lawtypeform.typename.data+'.'+extention#保存路径
+                file.save(p)#保存图片
+                type.typeimage=lawtypeform.typename.data+'.'+extention#保存到数据库里面的文件名
+            else:
+                type.typeimage=''            
+            type.LawTypName=lawtypeform.typename.data
+            type.parentId=""
+            type.save()
+            flash('添加成功','message')
+        elif lawtypeform.addType.data=='二级分类':
+            type=LawType()
+            type.LawTypName=lawtypeform.typename.data
+            type.parentId=lawtypeform.parentName.data
+            type.save()
+            flash('添加成功','message')
+        elif lawtypeform.addType.data=='三级分类':
+            type=LawType()
+            type.LawTypName=lawtypeform.typename.data
+            type.parentId=lawtypeform.detailTypeName.data
+            type.save()
+            flash('添加成功','message')
+        return redirect(url_for('lawtype'))
+    return render_template('lawtype.html',form=form,lawtypeform=lawtypeform,ptypes=ptypes,types=types)
+
+@app.route('/treeviewtest')
+def treeviewtest():
+    form=SearchForm()
+    return render_template('treetest.html',form=form)
 #@app.route('/home')
 #def home():
 #    """Renders the home page."""

@@ -1,86 +1,35 @@
 ﻿{% extends "base.html" %}
-
 {% block content %}
 <div class="col-lg-12">
     <div class="jumbotron">
         <div class="row">
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-                        <a href="{{url_for('listlaw',page=1,type='综合')}}">
-                            <img src="../static/image/icon/zh.jpg" width="180" height="180" class="img-circle" title="综合类" />
-                        </a>
+            {% if types %}
+                {% for type in types %}
+                    <div class="col-lg-3">
+                        <div class="list-group">
+                            <div class="list-group-item-heading" style="text-align:center">
+                                <a href="{{url_for('listlaw',page=1,type=type.LawTypName)}}" target="_blank">
+                                    <img src="
+                                         {% if type.typeimage %}
+                                         ../static/image/icon/{{type.typeimage}}
+                                         {% else %}
+                                         ../static/image/icon/defaultypeicon.jpg
+                                         {% endif %}
+                                         "
+                                         width="180" height="180"
+                                         class="img-circle" title={{type.LawTypName}} />
+                                </a>
+                            </div> 
+                            <p class="label-info">
+                                <h3 style="text-align:center;font-family:SimHei">
+                                    <a href="{{url_for('listlaw',page=1,type=type.LawTypName)}}">{{type.LawTypName}}</a>
+                                </h3>
+                            </p>                           
+                        </div>
                     </div>
-                    <div class="text-center">
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-
-                        <a href="{{url_for('listlaw',page=1,type='审计')}}">
-                            <img src="../static/image/icon/sj.jpg" width="180" height="180" class="img-circle" title="审计类" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-                        <a href="{{url_for('listlaw',page=1,type='财政财务')}}">
-                            <img src="../static/image/icon/cz.jpg" width="180" height="180" class="img-circle" title="财政财务类" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-                        <a href="{{url_for('listlaw',page=1,type='税收')}}">
-                            <img src="../static/image/icon/ss.jpg" width="180" height="180" class="img-circle" title="税收类" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-
-                        <a href="{{url_for('listlaw',page=1,type='金融')}}">
-                            <img src="../static/image/icon/jr.jpg" width="180" height="180" class="img-circle" title="金融类" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-                        <a href="{{url_for('listlaw',page=1,type='企业')}}">
-                            <img src="../static/image/icon/qy.jpg" width="180" height="180" class="img-circle" title="企业类" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <div class="list-group-item-heading" style="text-align:center">
-
-                        <a href="{{url_for('listlaw',page=1,type='党内规章制度')}}">
-                            <img src="../static/image/icon/dn.jpg" width="180" height="180" class="img-circle" title="党内规章制度" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
+                {% endfor %}
+            {% endif %}          
+        </div>       
     </div>
 </div>
 

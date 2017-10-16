@@ -5,8 +5,9 @@ from flask_script import Manager,Server
 from os import environ
 from weblog import app
 from weblog.MongoDB_Models import mongo,User,Comment,Law,Department,LawType
+import win32com
 
-HOST = environ.get('SERVER_HOST', '192.168.0.133')
+HOST = environ.get('SERVER_HOST', '127.0.0.1')
 try:
     PORT = int(environ.get('SERVER_PORT', '5000'))
 except ValueError:
