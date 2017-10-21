@@ -1,80 +1,102 @@
-﻿{% extends "layout.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <form method="post" action="{{url_for('edit',law_id=law.id)}}">
-                {{form.hidden_tag()}}
+                {{fromedit.hidden_tag()}}
                 <div class="list-group-item">
                     <div class="list-group-item-text">
                         <h5>标题:</h5>
-                        {% if form.LawTitle.errors %}
-                        {% for e in form.LawTitle.errors%}
+                        {% if fromedit.LawTitle.errors %}
+                        {% for e in fromedit.LawTitle.errors%}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{form.LawTitle(class_='form-control',value=law.LawTitle)}}
+                        {{fromedit.LawTitle(class_='form-control',value=law.LawTitle)}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>文号：</h5>
-                        {% if form.LawFileNo.errors %}
-                        {% for e in form.LawFileNo.errors%}
+                        {% if fromedit.LawFileNo.errors %}
+                        {% for e in fromedit.LawFileNo.errors%}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{form.LawFileNo(class_='form-control',value=law.LawFileNo)}}
+                        {{fromedit.LawFileNo(class_='form-control',value=law.LawFileNo)}}
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>发布部门：</h5>
+                        {% if fromedit.LawDepartment.errors %}
+                        {% for e in fromedit.LawDepartment.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{fromedit.LawDepartment(class_='form-control',value=law.LawPublishDepart)}}
                     </div>
                     <div class="list-group-item-text">
                         <h5>法规分类</h5>
-                        {% if form.LawType.errors %}
-                        {% for e in form.LawType.errors %}
+                        {% if fromedit.LawType.errors %}
+                        {% for e in fromedit.LawType.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawType(class_='form-control',value=law.LawType)}}
+                        {{ fromedit.LawType(class_='form-control',value=law.LawType.LawTypName)}}
+                        <div id="getlawtype">{{law.LawType.LawTypName}}</div>
                     </div>
                     <div class="list-group-item-text">
-                        <h5>发规发布/生效日期：</h5>
-                        {% if form.LawPublishDate.errors %}
-                        {% for e in form.LawPublishDate.errors %}
+                        <h5>二级分类</h5>
+                        {% if fromedit.LawTypeDetail.errors %}
+                        {% for e in fromedit.LawTypeDetail.errors %}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{ fromedit.LawTypeDetail(class_='form-control')}}
+                        <div id="m" class="hidden"></div>
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>法规发布/生效日期：</h5>
+                        {% if fromedit.LawPublishDate.errors %}
+                        {% for e in fromedit.LawPublishDate.errors %}
                         <p class="help-block"><font color="red">发规发布/生效日期：{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawPublishDate(class_='datetimepicker-days',type='date',value=law.LawPublishDate)}}
+                        {{ fromedit.LawPublishDate(class_='form-control',type='date')}}
+                        <div id="lawpubdate" class="hidden">{{law.LawPublishDate}}</div>
                     </div>
 
                     <div class="list-group-item-text">
                         <h5>法规正文</h5>
-                        {% if form.LawContent.errors %}
-                        {% for e in form.LawContent.errors %}
+                        {% if fromedit.LawContent.errors %}
+                        {% for e in fromedit.LawContent.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawContent(data=law.LawContent)}}
+                        {{ fromedit.LawContent(class_='form-control')}}
+                        <div id="law_id" class="hidden">{{law.LawContent}}</div>
                     </div>
                     <div class="list-group-item-text">
                         <h5>标签(多个标签以空格分隔):</h5>
-                        {% if form.LawTags.errors %}
-                        {% for e in form.LawTags.errors %}
+                        {% if fromedit.LawTags.errors %}
+                        {% for e in fromedit.LawTags.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawTags(class_='form-control',value=tags)}}
+                        {{ fromedit.LawTags(class_='form-control',value=tags)}}
+                       
                     </div>
                     <div class="list-group-item-text">
                         <h5>备注：(可以备注法规的废止日期等)</h5>
-                        {% if form.LawMark.errors %}
-                        {% for e in form.LawMark.errors %}
+                        {% if fromedit.LawMark.errors %}
+                        {% for e in fromedit.LawMark.errors %}
                         <p class="help-block"><font color="red">{{e}}</font></p>
                         {% endfor %}
                         {% endif %}
-                        {{ form.LawMark(class_='form-control',value=law.LawMark)}}
+                        {{ fromedit.LawMark(class_='form-control',value=law.LawMark)}}
                     </div>
                     <p>
                         <div class="list-group-item-text">
                             <input class="btn btn-primary" type="submit" value="保存更改" />
-                            <input class="btn btn-primary" type="button" onclick="OnSave('aaa')" value="获取内容" />
                         </div>
                     </p>
                 </div>
@@ -90,7 +112,36 @@
     var editor=CKEDITOR.replace('LawContent', {
         filebrowserUploadUrl: '/ckupload/',
     });
-    
+    editor.setData(document.getElementById('law_id').textContent);
+    var date = new Date(document.getElementById('lawpubdate').textContent);
+    var month=(date.getMonth() + 1)<10?"0"+(date.getMonth() + 1):(date.getMonth() + 1);
+    var day=date.getDate()<10?("0"+date.getDate()):(date.getDate());
+    var datastr = date.getFullYear() + "-" + month + "-" + day;    
+    $("#LawPublishDate").val(datastr);
+    $("#LawType").val()
+    $(function () {
+        $("#LawType").change(function () {
+            parentId = $(this).val();
+            url = "{{url_for('set_lawdetail',parentId=0)}}".replace("/0", "/" + parentId)
+            $.get(url, function (result) {
+                $("#m").html(result);
+                var obj1 = document.getElementsByName('LawTypeDetail1');
+                var LawTypeDetail = document.getElementsByName('LawTypeDetail');
+                for (var i = LawTypeDetail.item(0).childNodes.length; i >= 0; i--) {
+                    var n = LawTypeDetail.item(0).childNodes[i];
+                    if (n != null) {
+                        LawTypeDetail.item(0).removeChild(n);
+                    }
+                }
+                var j = obj1.item(0).childNodes.length;
+                for (var i = j - 1; i >= 0; i--) {
+                    LawTypeDetail.item(0).appendChild(obj1.item(0).childNodes[i]);
+                }
+            })
+
+        })
+    }
+)
 </script>
 <script type="text/javascript">
     function OnSave(data) {

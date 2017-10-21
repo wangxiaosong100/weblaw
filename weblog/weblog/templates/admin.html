@@ -1,0 +1,116 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">            
+            <h4>未通过审核的法规</h4>
+            <div class="list-group-item table table-striped">
+                
+                <div class="col-lg-12">
+                    <div class="list-group-item-heading">
+                        
+                        <div class="row">
+                            <div class="col-lg-6" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-text-width"></span>标题</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-list-alt"></span>文号</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-user"></span>发布人</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-cog"></span>操作</h4>
+                            </div>
+                        </div>
+                     </div>
+                    {% if laws %}
+                    <div class="list-group-item-text table table-striped">
+                        {% for law in laws %}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h6><a href="{{url_for('detail',law_id=law.id,check=law.check)}}">{{law.LawTitle}}</a></h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h6>{{law.LawFileNo}}</h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h6>{{law.user.username}}</h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h5>
+                                    <a href="{{url_for('detail',law_id=law.id,check=law.check)}}"><span class="glyphicon glyphicon-eye-open" title="查看"></span></a>&nbsp;|&nbsp;
+                                    <a href="{{url_for('checkLaw',law_id=law.id,check='0')}}"><span class="glyphicon glyphicon-remove" title="审核不通过"></span></a>&nbsp;|&nbsp;
+                                    <a href="{{url_for('checkLaw',law_id=law.id,check='1')}}"><span class="glyphicon glyphicon-ok" title="审核通过"></span></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>通过审核的法规</h4>
+            <div class="list-group-item table table-striped">
+
+                <div class="col-lg-12">
+                    <div class="list-group-item-heading">
+                        {% if alllaws %}
+                        <div class="row">
+                            <div class="col-lg-6" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-text-width"></span>标题</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-list-alt"></span>文号</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-user"></span>发布人</h4>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h4><span class="glyphicon glyphicon-cog"></span>操作</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item-text table table-striped">
+                        {% for law in alllaws %}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h6><a href="{{url_for('detail',law_id=law.id,check=law.check)}}">{{law.LawTitle}}</a></h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h6>{{law.LawFileNo}}</h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h6>{{law.user.username}}</h6>
+                            </div>
+                            <div class="col-lg-2" style="text-align:center">
+                                <h5>
+                                    <a href="{{url_for('edit',law_id=law.id)}}"><span class="glyphicon glyphicon-edit" title="修改"></span></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <a href="{{url_for('delete',law_id=law.id)}}"><span class="glyphicon glyphicon-trash" title="删除"></span><div id="lawid" class="hidden">{{law.id}}</div></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="list-group">
+                <h4><a href="{{url_for('lawtype')}}">法规类型维护</a></h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+   
+</script>
+{% endblock %}

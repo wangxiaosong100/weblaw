@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
     <link href="../static/jquery-treeview/jquery.treeview.css" rel="stylesheet" />
     <link href="../static/jquery-treeview/demo/screen.css" rel="stylesheet" />
+    
     <script src="../static/jquery-treeview/demo/jquery-3.2.1.min.js"></script>
     <script src="../static/jquery-treeview/jquery.treeview.js"></script>
     <script src="../static/jquery-treeview/demo/jquery.cookie.js"></script>
@@ -17,6 +18,8 @@
     <script src="../static/ckeditor/ckeditor.js"></script>
     <script charset="utf-8" src="/static/kindeditor/plugins/code/prettify.js"></script>
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
+    <script src="../static/scripts/moment.min.js"></script>
+    
 </head>
 
 <body style="background-image: url(../static/image/icon/background1.jpg); ">
@@ -25,9 +28,11 @@
             <div class="navbar-header">
                 <label class="btn-toolbar"><img src="../static/image/icon/logo.jpg" width="64" height="64" class="img-circle" /></label>
                 <label class="btn-toolbar">&nbsp;</label>
+                
             </div>
             <div class="navbar-header">
                 <h5><a href="/" class="navbar-brand">审计法规库</a></h5>
+                
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -40,11 +45,13 @@
                          "
                              class="img-circle" width="64" height="64" />
                         <font color="blue">
-                            {% if g.current_user %}
-                            {{g.current_user.username}}
-                            {% else %}
-                            游客
-                            {% endif %}
+                           
+                                {% if g.current_user %}
+                                {{g.current_user.username}}
+                                {% else %}
+                                游客
+                                {% endif %}
+                            
                         </font>
 
                     </li>
@@ -73,7 +80,7 @@
 
     <div class="container body-content">
         <div class="col-lg-12">
-            <div class="jumbotron">
+            <div class="jumbotron" style="height:160px">
                 <div class="row">
                     <br />
                     <div class="list-group-item-text" style="text-align:center">
@@ -83,14 +90,14 @@
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{form.content(_class='form-control')}}
+                            {{form.content(_class='form-control',style='font-size:large')}}
                             {% if form.searchtype.errors %}
                             {% for e in form.searchtype.errors %}
                             <p class="help-block"><font color="red">{{e}}</font></p>
                             {% endfor %}
                             {% endif %}
-                            {{form.searchtype(_class='form-control')}}
-                            <input type="submit" class="btn-primary" value="搜一下" />
+                            {{form.searchtype(_class='form-control',style='font-size:large')}}
+                            <input type="submit" class="btn btn-primary" style="font-size:small" value="搜一下" />
                         </form>
                     </div>
                 </div>
@@ -100,7 +107,7 @@
         <hr />
         <footer>
             <p>&copy; {{ year }} - 云南省审计厅●审计法规库&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url_for('contact')}}" target="_blank">联系我们</a></p>
-            Powered by<img src="../static/image/icon/python.jpg" height="32" width="126"/>
+            <span style="font-family:SimHei">Powered by</span> <img src="../static/image/icon/python.jpg" height="32" width="126"/>
         </footer>
     </div>
 

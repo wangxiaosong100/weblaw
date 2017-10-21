@@ -1,0 +1,140 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="col-lg-12">
+        <div class="row">
+            <form method="post" enctype="multipart/form-data" action="{{url_for('lawtype')}}">
+                {{lawtypeform.hidden_tag()}}
+                <div class="list-group-item">
+                    <div class="list-group-item-text">
+                        <h5>添加类别:</h5>
+                        {% if lawtypeform.addType.errors %}
+                        {% for e in lawtypeform.addType.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{lawtypeform.addType(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text" id="p1">
+                        <h5>一级分类名称：</h5>
+                        {% if lawtypeform.parentName.errors %}
+                        {% for e in lawtypeform.parentName.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{lawtypeform.parentName(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text" id="p2">
+                        <h5>二级分类名称：</h5>
+                        {% if lawtypeform.detailTypeName.errors %}
+                        {% for e in lawtypeform.detailTypeName.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{lawtypeform.detailTypeName(class_='form-control')}}
+                        <div id="m" class="hidden"></div>
+                    </div>
+                    <div class="list-group-item-text">
+                        <h5>类型名称:</h5>
+                        {% if lawtypeform.typename.errors %}
+                        {% for e in lawtypeform.typename.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{lawtypeform.typename(class_='form-control')}}
+                    </div>
+                    <div class="list-group-item-text" id="p3">
+                        <h5>显示图标(推荐使用180*180的图片，若不设置系统将显示默认图片):</h5>
+                        {% if lawtypeform.typeimage.errors %}
+                        {% for e in lawtypeform.typeimage.errors%}
+                        <p class="help-block"><font color="red">{{e}}</font></p>
+                        {% endfor %}
+                        {% endif %}
+                        {{lawtypeform.typeimage(class_='form-control')}}
+                    </div>
+                    <p>
+                        <div class="list-group-item-text">
+                            <input class="btn btn-primary" type="submit" value="添加" />
+                        </div>
+                    </p>
+                </div>
+            </form>            
+        </div> 
+        <!--<div class="row">
+            {% if ptypes %}
+            <div class="list-group-item">
+                {% for pt in ptypes %}
+                <div class="list-group-item-heading">
+                    <ul>
+                        {{pt.LawTypName}}
+                        {% if types %}
+
+                                {% for type in types %}
+                                {% if type.parentId==pt.id|string%}
+                                <li>
+                                    {{type.LawTypName}}
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>-->
+   
+    </div>
+    
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(function () {
+        $("#parentName").change(function () {
+            parentId = $(this).val();
+            url = "{{url_for('set_lawdetail',parentId=0)}}".replace("/0", "/" + parentId)
+            $.get(url, function (result) {
+                $("#m").html(result);
+                var obj1 = document.getElementsByName('LawTypeDetail1');
+                var LawTypeDetail = document.getElementsByName('detailTypeName');
+                for (var i = LawTypeDetail.item(0).childNodes.length; i >= 0; i--) {
+                    var n = LawTypeDetail.item(0).childNodes[i];
+                    if (n != null) {
+                        LawTypeDetail.item(0).removeChild(n);
+                    }
+                }
+                var j = obj1.item(0).childNodes.length;
+                for (var i = j - 1; i >= 0; i--) {
+                    LawTypeDetail.item(0).appendChild(obj1.item(0).childNodes[i]);
+                }
+            })
+
+        })
+    }
+)
+    $(function () {
+        $("#addType").change(function () {
+            type = $(this).val();
+            if (type == '一级分类') {
+                $("#p1").hide();
+                $("#p2").hide();
+                $("#p3").show();
+            }
+            else if (type == '二级分类') {
+                $("#p1").show();
+                $("#p2").hide();
+                $("#p3").hide();
+            }
+            else if (type == '三级分类') {
+                $("#p1").show();
+                $("#p2").show();
+                $("#p3").hide();
+            }
+        })
+    }
+        )
+</script>
+{% endblock %}

@@ -113,6 +113,9 @@
     <Folder Include="weblog\static\ckeditor\skins\moono-lisa\images\" />
     <Folder Include="weblog\static\ckeditor\skins\moono-lisa\images\hidpi\" />
     <Folder Include="weblog\static\content\" />
+    <Folder Include="weblog\static\exportWord\" />
+    <Folder Include="weblog\static\exportWord\css\" />
+    <Folder Include="weblog\static\exportWord\js\" />
     <Folder Include="weblog\static\fonts\" />
     <Folder Include="weblog\static\image\" />
     <Folder Include="weblog\static\image\icon\" />
@@ -125,6 +128,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="weblog\static\exportWord\css\demo.css" />
+    <Content Include="weblog\static\exportWord\index.html" />
+    <Content Include="weblog\static\exportWord\js\FileSaver.js" />
+    <Content Include="weblog\static\exportWord\js\jquery-2.1.1.min.js" />
+    <Content Include="weblog\static\exportWord\js\jquery.wordexport.js" />
     <Content Include="weblog\static\jquery-treeview\.gitignore" />
     <Content Include="weblog\static\jquery-treeview\bower.json" />
     <Content Include="weblog\static\jquery-treeview\changelog.md" />
@@ -166,8 +174,10 @@
     <Content Include="weblog\static\jquery-treeview\jquery.treeview.sortable.js" />
     <Content Include="weblog\static\jquery-treeview\readme.md" />
     <Content Include="weblog\static\jquery-treeview\screenshot.png" />
+    <Content Include="weblog\static\scripts\moment.min.js" />
     <Content Include="weblog\templates\listlawFrame.html" />
     <Content Include="weblog\templates\treetest.html" />
+    <Content Include="weblog\templates\dowloadlaw.html" />
     <None Include="weblogconfig.pubxml" />
     <Content Include="weblog\static\ckeditor\adapters\jquery.js" />
     <Content Include="weblog\static\ckeditor\build-config.js" />

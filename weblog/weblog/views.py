@@ -29,8 +29,12 @@ def page_not_found(error):
 @app.route('/default')
 def default():
     form=SearchForm()
-    types=LawType.objects(parentId='').all()
-    return render_template('default.html',form=form,year=datetime.now().year,title='主页',types=types)
+    types=LawType.objects(parentId='').order_by("+order").all()
+    return render_template('default.html',
+                           form=form,
+                           year=datetime.now().year,
+                           title='主页',
+                           types=types)
 
 @app.route('/admin')
 def admin():
@@ -38,12 +42,20 @@ def admin():
     if not g.current_user:
         flash('请登录','danger')
         return redirect(url_for('.login'))
-    if is_admin(g.current_user.username):
-        
+    if is_admin(g.current_user.username):        
         laws=Law.objects(check='0').order_by("-time").all()
-        return render_template('admin.html',form=form,laws=laws,title='管理页面')
+        alllaws=Law.objects(check='1').order_by("-time").all()
+        return render_template('admin.html',
+                               form=form,
+                               laws=laws,
+                               alllaws=alllaws,
+                               title='管理页面',
+                               year=datetime.now().year)
     else:
-        return render_template('adminError.html',form=form,title='出错')
+        return render_template('adminError.html',
+                               form=form,
+                               title='出错',
+                               year=datetime.now().year)
 
 
 
@@ -63,13 +75,15 @@ def listlaw(page,type):
                            recent=recent,#侧边栏数据
                            lawtypedetail=lawtypedetail,#子类
                            title='法规列表',
-                           lawtypedetailsub=lawtypedetailsub)#孙子类
-
+                           lawtypedetailsub=lawtypedetailsub,
+                           year=datetime.now().year
+                           )#孙子类
+##这个页界显示在listLaw页面的iframe框架中
 @app.route('/listlawFrame/<int:page>,<string:type>',methods=['GET', 'POST'])
 def listlawFrame(page,type):
     recent=sidebar_data()
     lawtypedetail=LawType.objects(LawTypName=type).first()
-    laws=Law.objects(LawType=lawtypedetail,check='1').paginate(page,5)
+    laws=Law.objects(LawType=lawtypedetail,check='1').paginate(page,15)
     return render_template('listlawFrame.html',
                            laws=laws,type=type)
 
@@ -84,19 +98,42 @@ def searchLaw(page=1):
         if form.searchtype.data=='LawTitle':
             laws=Law.objects(LawTitle__contains=searchdata,check='1').order_by("-time").paginate(page,5)
             searchtype='标题'
-            return render_template('search.html',form=form,type=searchdata,laws=laws,recent=recent,searchtype=searchtype)
+            return render_template('search.html',
+                                   form=form,
+                                   type=searchdata,
+                                   laws=laws,
+                                   recent=recent,
+                                   searchtype=searchtype,
+                                   titile='查询',
+                                   year=datetime.now().year
+                                   )
         elif form.searchtype.data=='LawFileNo':
             laws=Law.objects(LawFileNo__contains=searchdata,check='1').order_by("-time").paginate(page,5)
             searchtype='文号'
-            return render_template('search.html',form=form,type=searchdata,laws=laws,recent=recent,searchtype=searchtype)
+            return render_template('search.html',
+                                   form=form,
+                                   type=searchdata,
+                                   laws=laws,
+                                   recent=recent,
+                                   searchtype=searchtype,
+                                   titile='查询',
+                                   year=datetime.now().year)
         elif form.searchtype.data=='LawContent':
             laws=Law.objects(LawContent__contains=searchdata,check='1').order_by("-time").paginate(page,5)
             searchtype='内容'
-            return render_template('search.html',form=form,type=searchdata,laws=laws,recent=recent,searchtype=searchtype)
+            return render_template('search.html',
+                                   form=form,
+                                   type=searchdata,
+                                   laws=laws,
+                                   recent=recent,
+                                   searchtype=searchtype,
+                                   titile='查询',
+                                   year=datetime.now().year)
     else:
         flash('非法搜索,请输入要搜索的内容','danger')
         return redirect(url_for('default'))
 
+#分页
 @app.route('/paginate/<int:page>,<string:searchtype>,<string:keywords>')
 def paginate(page,searchtype,keywords):
     form=SearchForm()
@@ -182,7 +219,9 @@ def register():
     return render_template(
         'register.html',
         Registerform=registerform,
-        form=form
+        form=form,
+        title='用户注册',       
+        year=datetime.now().year
         )
 #set_county,set_lawdetail分别用来设置注册界面中区县下拉框和法规分类明细下拉框的选项目
 #set_county函数的参数citycode作为区县的parentCode的值
@@ -207,42 +246,50 @@ def set_lawdetail(parentId):
 @app.route('/edit/<string:law_id>',methods=['GET', 'POST'])
 def edit(law_id):
     if  not g.current_user:
-        flash('需要登录才能新增法规',category="danger")
+        flash('需要登录才能修改法规',category="danger")
         return redirect(url_for('login'))
-    form=newLawForm()
+    form=SearchForm()
+    fromedit=newLawForm()
     law=Law.objects(id=law_id).first()
     ss=""
-    for s in law.LawTags:
+    for s in law.LawTags:        
         ss=ss+" "+s
     
-    if form.validate_on_submit():
+    if fromedit.validate_on_submit():
         fromcomment=CommentForm()
-        law_tags=form.LawTags.data
+        law_tags=fromedit.LawTags.data
         taglist=law_tags.split()
+        lawtyp=LawType.objects(LawTypName=fromedit.LawTypeDetail.data).first()
         result=Law.objects(id=law_id).update(
-            LawTitle=form.LawTitle.data,
-            LawFileNo=form.LawFileNo.data,
-            LawType=form.LawType.data,
-            LawPublishDate=form.LawPublishDate.data,
-            LawContent=form.LawContent.data,
-            LawMark=form.LawMark.data,
+            LawTitle=fromedit.LawTitle.data,
+            LawFileNo=fromedit.LawFileNo.data,
+            LawPublishDepart=fromedit.LawDepartment.data,
+            LawType=lawtyp,
+            LawPublishDate=fromedit.LawPublishDate.data,
+            LawContent=fromedit.LawContent.data,
+            LawMark=fromedit.LawMark.data,
             LawTags=taglist
             )
         if result==1:
             flash('修改成功')
-            print("AAAUPDATE"+str(result))
-            return redirect(url_for('detail',law_id=law_id))
+            return redirect(url_for('admin'))
         
     return render_template(
         'edit.html',
         form=form,
+        fromedit=fromedit,
         law=law,
         tags=ss,
         year=datetime.now().year,
         title='修改法规'
         )
 
-
+@app.route('/delete/<string:law_id>')
+def delete(law_id):
+    law=Law.objects(id=law_id).first()
+    law.delete()
+    flash('成功删除','message')
+    return redirect(url_for('admin'))
 
 @app.route('/detail/<string:law_id>,<string:check>',methods=['GET', 'POST'])
 def detail(law_id,check):
@@ -373,7 +420,7 @@ def ckupload():
       response.headers["Content-Type"] = "text/html"
       return response
 def sidebar_data():
-    recent=Law.objects(check='1').order_by("-time").limit(5).all()
+    recent=Law.objects(check='1').order_by("-time").limit(10).all()
     return recent
 
 def is_admin(username):
@@ -427,62 +474,7 @@ def lawtype():
         return redirect(url_for('lawtype'))
     return render_template('lawtype.html',form=form,lawtypeform=lawtypeform,ptypes=ptypes,types=types)
 
-@app.route('/treeviewtest')
-def treeviewtest():
-    form=SearchForm()
-    return render_template('treetest.html',form=form)
-#@app.route('/home')
-#def home():
-#    """Renders the home page."""
-#    form=SearchForm()
-#    if form.validate_on_submit():
-#        keywords=form.content.data
-#        #result=search.whoosh_search(Law,query=keyword,fields=['LawContent'],limit=20)
-#        #return result
-#    laws=Law.objects.order_by("-time").all()
-#    return render_template(
-#        'index.html',
-#        title='主页',
-#        laws=laws,
-#        year=datetime.now().year,
-#        form=form
-#    )
-
-#@app.route('/type/<string:law_type>')
-#def type(law_type='ALL'):
-#    form=SearchForm()
-#    if law_type=='ALL':
-#        laws=Law.objects.order_by("-time").all()
-#    else:
-#        laws=Law.objects(LawType=law_type).order_by("-time").all()
-#    return render_template(
-#        'index.html',
-#        title='主页',
-#        laws=laws,
-#        year=datetime.now().year,
-#        form=form)
-#@app.route('/listlaw/<string:type>',methods=['GET', 'POST'])
-#def listlaw(type):
-#    recent=sidebar_data()
-#    form=SearchForm()
-#    laws=Law.objects(LawType=type).paginate(1,5)
-#    return render_template('listlaw.html',form=form,type=type,laws=laws,recent=recent)
-#@app.route('/paginate_test')
-#def paginate_test(page,searchtype='',keywords=''):
-#    form=SearchForm()
-#    recent=sidebar_data()
-#    if searchtype=='标题':
-#        laws=Law.objects(LawTitle__contains=keywords).order_by("-time").paginate(page,5)
-            
-#        return render_template('search.html',form=form,type=keywords,laws=laws,recent=recent,searchtype=searchtype)
-#    elif searchtype=='文号':
-#        laws=Law.objects(LawFileNo__contains=keywords).order_by("-time").paginate(page,5)
-            
-#        return render_template('search.html',form=form,type=keywords,laws=laws,recent=recent,searchtype=searchtype)
-#    elif searchtype=='内容':
-#        laws=Law.objects(LawContent__contains=keywords).order_by("-time").paginate(page,5)
-            
-#        return render_template('search.html',form=form,type=keywords,laws=laws,recent=recent,searchtype=searchtype)
-#    else:
-#        laws=Law.objects(LawType=searchtype).order_by("-time").paginate(page,5)
-#        return render_template('listlaw.html',form=form,type=searchtype,laws=laws,recent=recent)
+@app.route('/dowloadlaw/<string:law_id>')
+def dowloadlaw(law_id):
+    law=Law.objects(id=str(law_id)).first()    
+    return render_template('dowloadlaw.html',law=law)

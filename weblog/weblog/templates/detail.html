@@ -6,34 +6,49 @@
             <div class="list-group">
                 <div class="list-group-item">
                     <div class="list-group-item-heading" style="align-content:center">
-                        <h2 style="font-family:SimHei"><p style="text-align:center"> {{law.LawTitle}} </p></h2>
+                        <h2 style="font-family:SimHei"><p style="text-align:center" id="lawtitlejs"> {{law.LawTitle}} </p></h2>
                         <h3 style="text-align:center;font-family:FangSong_GB2312">{{law.LawFileNo}}</h3>
                         <hr style="height:5px;border:none;border-bottom:5px solid red;"/>
                         <h4 style="font-family:YouYuan">
                             <p>
-                                <li>文号：{{law.LawFileNo}}</li>
-                                <li>发布部门:{{law.LawPublishDepart}}</li>
-                                <li>分类：<a href="{{url_for('listlaw',page=1,type=parentType.LawTypName)}}" target="_blank">{{parentType.LawTypName}}</a>>>{{law.LawType.LawTypName}}</li>
-                                <li>
-                                    关键词:
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-file"></span>文&nbsp;&nbsp;&nbsp;&nbsp;号：{{law.LawFileNo}}</li>
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-home"></span>发布部门:{{law.LawPublishDepart}}</li>
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-flag"></span>分&nbsp;&nbsp;&nbsp;&nbsp;类：<a href="{{url_for('listlaw',page=1,type=parentType.LawTypName)}}" target="_blank">{{parentType.LawTypName}}</a>>>{{law.LawType.LawTypName}}</li>
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-dashboard"></span>生效日期：{{law.LawPublishDate}}</li>
+                                <li class ="list-unstyled"><span class="glyphicon glyphicon-tags"></span>关&nbsp;键&nbsp;词:
                                     {% for tag in tags %}
                                     {{tag | safe }} </a>
                                     {% endfor %}
+                                </liclass>
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-info-sign"></span>
+                                    备&nbsp;&nbsp;&nbsp;&nbsp;注:{{law.LawMark}}
                                 </li>
-                                <li>
-                                    备注:{{law.LawMark}}
+                                <li class="list-unstyled"><span class="glyphicon glyphicon-user"></span>
+                                     贡&nbsp;献&nbsp;人:{{law.user.department.departmentname}}>>{{law.user.username}}
                                 </li>
-                                <li>法规贡献人：{{law.user.department.departmentname}}>>{{law.user.username}}</li>
+                                <li class="list-unstyled" style="text-align:right">
+                                    <a class="jquery-word-export" href="javascript:void(0)">
+                                        <span class="glyphicon glyphicon-save"></span>
+                                        下载法规正文
+                                    </a>
+                                </li>
+                                <!--<a class="btn btn-default jquery-word-export" style="color: aqua">
+                                    <span class="word-icon">W</span>
+                                    导出为.doc文档
+                                </a>-->
                             </p>
                         </h4>
                         </span>
                         </p>
                         <h4></h4>
                     </div>
-                    <div class="list-group-item-text" style="font-family:FangSong_GB2312">
-                        <pre  style="font-family: FangSong_GB2312">
-                            <h3 style="font-family: FangSong_GB2312">{{law.LawContent|safe }}   </h3> 
-                        </pre>               
+                    <div class="list-group-item-text" style="font-family:FangSong_GB2312" id="pagecontent">
+                        <pre>
+                        <h3 style="font-family: FangSong_GB2312">{{law.LawContent|safe }}   </h3>
+                        </pre>
+
+                    </div>
+                    <div class="col-md-3">
                         
                     </div>
                 </div>
@@ -109,16 +124,17 @@
 </div>
 {% endblock%}
 {% block scripts %}
+<script src="../static/exportWord/js/jquery-2.1.1.min.js"></script>
+<script src="../static/exportWord/js/FileSaver.js"></script>
+<script src="../static/exportWord/js/jquery.wordexport.js"></script>
 <script type="text/javascript">
-    function getInnerHTML() {
-        alert(document.getElementById("lawContent").TEXT_NODE);
-    }
-    function load_home(data) {
-        document.getElementById("selfLawContent").innerHTML = '<object type="text/html" data="data" width="100%" height="100%"></object>';
-    }
-    window.onload = function () {
-        var x=document.getElementsById("LawContent");
-        alert(x.innerHTML)
-    };
+    jQuery(document).ready(function ($) {
+        var obj = document.getElementById("lawtitlejs")
+        var filename=obj.textContent;
+        $("a.jquery-word-export").click(function (event) {
+            $("#pagecontent").wordExport(filename);
+        });
+    });
 </script>
+
 {% endblock %}

@@ -1,0 +1,26 @@
+﻿
+                <div class="col-md-9" id="pagecontent">
+                    {{law.LawContent|safe}}
+
+                </div>
+                <div class="col-md-3">
+                    <a class="btn btn-default jquery-word-export" href="javascript:void(0)" style="color: aqua">
+                        <span class="word-icon">W</span>
+                        导出为.doc文档
+                    </a>
+                </div>
+
+
+        <script src="../static/exportWord/js/jquery-2.1.1.min.js"></script>
+
+        <script src="../static/exportWord/js/FileSaver.js"></script>
+
+        <script src="../static/exportWord/js/jquery.wordexport.js"></script>
+
+        <script type="text/javascript">
+            jQuery(document).ready(function ($) {
+                $("a.jquery-word-export").click(function (event) {
+                    $("#pagecontent").wordExport();
+                });
+            });
+        </script>

@@ -1,0 +1,47 @@
+﻿<html>
+<head>
+    <title></title>
+    <link href="../static/content/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <table class="table table-striped table-hover tab-pane">
+        <tbody >
+            <tr>
+                
+                <td style="text-align:center"><h5>法规标题</h5></td>
+            </tr>
+            {% if laws.items %}
+            
+            {% for law in laws.items %}
+            <tr style="text-align:left">
+                <th> <h5><a href="{{url_for('detail',law_id=law.id,check='1')}}" target="_blank">{{law.LawTitle}}</a></h5></th>
+            </tr>
+            {% endfor %}
+           
+            {% else %}
+            <tr>
+                <th><h5>该分类还未维护相关法规，敬请期待!</h5></th>
+            </tr>
+            {% endif %}
+            
+        </tbody>
+    </table>
+    <table class="table-hover">
+        <tbody>
+            <tr style="text-align:left">
+                <th>
+                    <h5>
+                        {% if laws.pages!=0 %}第&nbsp;
+                        {% for p in range(laws.pages) %}
+                        <a href="{{url_for('listlawFrame',page=p+1,type=type)}}">{{p+1}}&nbsp;</a>
+                        {% endfor %}
+                        页
+                        {% endif %}
+                    </h5>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    
+</body>
+</html>

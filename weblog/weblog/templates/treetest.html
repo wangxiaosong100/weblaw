@@ -1,0 +1,27 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+    <ul id="tree" class="filetree">
+        <li>
+           <span class="folder">A</span> 
+            <ul>
+                <li>
+                    <span class="folder"> AA</span>
+                    <ul>
+                        <li><span class="file">aaa</span> </li>
+                        <li class="file">aab</li>
+                    </ul>
+                </li>
+                <li>AB</li>
+            </ul>
+        </li>
+
+    </ul>
+
+{% endblock %}
+{% block scripts %}
+<script >
+    $("#tree").treeview();
+</script>
+{% endblock %}

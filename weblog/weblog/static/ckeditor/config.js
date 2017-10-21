@@ -21,7 +21,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'styles' },
+		{ name: 'styles', groups: ['Styles', 'Formate', 'Font', 'FontSize'] },
 		{ name: 'colors' },
 		{ name: 'about' }
 	];
